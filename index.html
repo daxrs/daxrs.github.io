@@ -179,12 +179,23 @@
                 box-shadow: 0 0 10px rgba(0, 245, 255, 0.2);
             }
         </style>
-        <script async src="https://pl.dax.rs/js/pa-N4WRzGRFdsnTQvX8dywO9.js"></script>
+        <script
+            async
+            src="https://pl.dax.rs/js/pa-N4WRzGRFdsnTQvX8dywO9.js"
+        ></script>
         <script>
-          window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-          plausible.init()
+            ((window.plausible =
+                window.plausible ||
+                function () {
+                    (plausible.q = plausible.q || []).push(arguments);
+                }),
+                (plausible.init =
+                    plausible.init ||
+                    function (i) {
+                        plausible.o = i || {};
+                    }));
+            plausible.init();
         </script>
-
     </head>
     <body
         class="font-body-lg text-body-lg overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container"
@@ -441,7 +452,7 @@
                 </div>
                 <div class="flex gap-8">
                     <a
-                        class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity opacity-80 hover:opacity-100"
+                        class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity opacity-80 hover:opacity-100 plausible-event-name=github+visit"
                         href="https://github.com/daxrs"
                         >GITHUB</a
                     >
