@@ -1,54 +1,1355 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>dax.rs | High-Performance DAX/XMLA Server in Rust</title>
-    <link>https://www.dax.rs/</link>
-    <description>Recent content on dax.rs | High-Performance DAX/XMLA Server in Rust</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 29 Jul 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://www.dax.rs/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Running</title>
-      <link>https://www.dax.rs/docs/running/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://www.dax.rs/docs/running/</guid>
-      <description>&lt;h2 id=&#34;run-server&#34;&gt;Run server&lt;/h2&gt;&#xA;&lt;p&gt;The server scans &lt;code&gt;--models-root&lt;/code&gt; for every &lt;code&gt;*.json&lt;/code&gt; TMSL file and loads each as a separate model. With no flags at all, it defaults to &lt;code&gt;./demodata&lt;/code&gt; for both models and datasets — generate the demo dataset first with &lt;code&gt;cargo run --bin generate-demodata&lt;/code&gt;, then:&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cargo run --bin dax-rs&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Or point it at your own models directory:&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;cargo run --bin dax-rs -- --models-root /path/to/models --datasets-root /path/to/data&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Key flags:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;--models-root &amp;lt;dir&amp;gt;&lt;/code&gt; — directory scanned for &lt;code&gt;*.json&lt;/code&gt; TMSL model files, each loaded as a separate model (default: &lt;code&gt;./demodata&lt;/code&gt;)&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;--datasets-root &amp;lt;dir&amp;gt;&lt;/code&gt; — directory containing parquet data files (default: &lt;code&gt;./demodata&lt;/code&gt;)&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;--port &amp;lt;n&amp;gt;&lt;/code&gt; — listen port (default: &lt;code&gt;3000&lt;/code&gt;)&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;--config &amp;lt;file&amp;gt;&lt;/code&gt; — YAML config file path (default: &lt;code&gt;server.yaml&lt;/code&gt; if present)&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;docker&#34;&gt;Docker&lt;/h2&gt;&#xA;&lt;p&gt;Build the image (stable Rust, no extra polars perf flags):&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Configuration</title>
-      <link>https://www.dax.rs/docs/server_config/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://www.dax.rs/docs/server_config/</guid>
-      <description>&lt;h1 id=&#34;server-configuration&#34;&gt;Server Configuration&lt;/h1&gt;&#xA;&lt;p&gt;The server reads configuration from three sources in increasing priority order:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;code&gt;server.yaml&lt;/code&gt; (or the file given by &lt;code&gt;--config&lt;/code&gt; / &lt;code&gt;$DAX_CONFIG&lt;/code&gt;)&lt;/li&gt;&#xA;&lt;li&gt;Environment variables&lt;/li&gt;&#xA;&lt;li&gt;CLI flags&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h2 id=&#34;yaml-file&#34;&gt;YAML file&lt;/h2&gt;&#xA;&lt;p&gt;By default the server looks for &lt;code&gt;server.yaml&lt;/code&gt; in the working directory. An alternative path can be supplied with &lt;code&gt;--config &amp;lt;path&amp;gt;&lt;/code&gt; or the &lt;code&gt;DAX_CONFIG&lt;/code&gt; environment variable. If the file is absent it is silently skipped.&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;server_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;dax-rs&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;hostname&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;localhost&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;port&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;3000&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;locale_identifier&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1033&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;log_level&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;info&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;concurrency&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;max_concurrency&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;32&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;max_wait_secs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;30&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;storage&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;models&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;local&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;./models&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;datasets&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;local&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;./data&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The XMLA endpoint URL (&lt;code&gt;http://&amp;lt;hostname&amp;gt;:&amp;lt;port&amp;gt;/xmla&lt;/code&gt;) and the MSOLAP connection string are derived automatically from &lt;code&gt;hostname&lt;/code&gt; and &lt;code&gt;port&lt;/code&gt;.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>DAX functions</title>
-      <link>https://www.dax.rs/docs/dax_functions/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://www.dax.rs/docs/dax_functions/</guid>
-      <description>&lt;h1 id=&#34;dax-functions--implementation-status&#34;&gt;DAX Functions — Implementation Status&lt;/h1&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Compliant&lt;/th&gt;&#xA;          &lt;th&gt;Partial&lt;/th&gt;&#xA;          &lt;th&gt;Pending&lt;/th&gt;&#xA;          &lt;th&gt;Total&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;122&lt;/td&gt;&#xA;          &lt;td&gt;0&lt;/td&gt;&#xA;          &lt;td&gt;89&lt;/td&gt;&#xA;          &lt;td&gt;211&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;Each function is marked &lt;strong&gt;Compliant&lt;/strong&gt; (matches DAX behaviour for all documented inputs), &lt;strong&gt;Partial&lt;/strong&gt; (works for common cases but has known gaps), or &lt;strong&gt;Pending&lt;/strong&gt; (not yet implemented).&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;aggregation-functions&#34;&gt;Aggregation Functions&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Function&lt;/th&gt;&#xA;          &lt;th&gt;Status&lt;/th&gt;&#xA;          &lt;th&gt;Notes&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SUM(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COUNT(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COUNTA(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;AVERAGE(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;AVERAGEA(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;MIN(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;MINA(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;MAX(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;MAXA(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DISTINCTCOUNT(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COUNTROWS(table)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ISEMPTY(table)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;HASONEVALUE(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DISTINCTCOUNTNOBLANK(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COUNTBLANK(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;PRODUCT(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;iterator-x-functions&#34;&gt;Iterator (X) Functions&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Function&lt;/th&gt;&#xA;          &lt;th&gt;Status&lt;/th&gt;&#xA;          &lt;th&gt;Notes&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SUMX(table, expr)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;AVERAGEX(table, expr)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;MAXX(table, expr)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;MINX(table, expr)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COUNTX(table, expr)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COUNTAX(table, expr)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;date-and-time-functions&#34;&gt;Date and time functions&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Function&lt;/th&gt;&#xA;          &lt;th&gt;Status&lt;/th&gt;&#xA;          &lt;th&gt;Notes&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DATE(year, month, day)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DATEDIFF(date1, date2, interval)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;EDATE(date, months)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;EOMONTH(date, months)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;UTCTODAY()&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;UTCNOW()&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;TODAY()&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;NOW()&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;YEAR(date)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;MONTH(date)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DAY(date)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;HOUR(date)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;MINUTE(date)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SECOND(date)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;CALENDAR(start, end)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DATEVALUE(text)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;NETWORKDAYS(start, end [, holidays, weekend])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;QUARTER(date)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;TIME(hour, minute, second)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;TIMEVALUE(text)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;WEEKDAY(date [, return_type])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;WEEKNUM(date [, return_type])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;YEARFRAC(start, end [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;table-functions&#34;&gt;Table Functions&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Function&lt;/th&gt;&#xA;          &lt;th&gt;Status&lt;/th&gt;&#xA;          &lt;th&gt;Notes&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;FILTER(table, condition)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;VALUES(column | table)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ALL(table | column, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ALLEXCEPT(table, column, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;REMOVEFILTERS(table | column, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SUMMARIZE(table, col, ..., name, expr, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DISTINCT(column | table)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ROW(name, expr, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ADDCOLUMNS(table, name, expr, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SAMPLE(n, table, orderBy, [order], ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SELECTCOLUMNS(table, name, expr, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;Like &lt;code&gt;ADDCOLUMNS&lt;/code&gt; but starts from an empty table; same row-iteration approach. Medium complexity.&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SUMMARIZECOLUMNS(col, ..., filter, ..., name, expr, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;GROUPBY(table, col, ..., name, expr, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;RANKX(table, expr [, value, order, ties])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;Needs a full table scan to build a sorted rank map, then a second pass to look up each row. Medium–high complexity; tie-handling (Skip/Dense) adds branching.&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;TOPN(n, table, expr [, order, ...])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;GENERATE(table1, table2)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;GENERATEALL(table1, table2)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;CROSSJOIN(table, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;EXCEPT(table1, table2)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;INTERSECT(table1, table2)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;UNION(table1, table2, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;NATURALLEFTOUTERJOIN(left, right)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;NATURALINNERJOIN(left, right)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;Same as &lt;code&gt;NATURALLEFTOUTERJOIN&lt;/code&gt; but drops left rows with no right match. Trivial extension once the left-join path exists — swap &lt;code&gt;JoinType::Left&lt;/code&gt; for &lt;code&gt;JoinType::Inner&lt;/code&gt;.&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SUBSTITUTEWITHINDEX(table, name, indexTable, col, order)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;filter-context-functions&#34;&gt;Filter Context Functions&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Function&lt;/th&gt;&#xA;          &lt;th&gt;Status&lt;/th&gt;&#xA;          &lt;th&gt;Notes&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;CALCULATE(expr, filter, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SELECTEDVALUE(column [, alternate])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ISINSCOPE(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ISFILTERED(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ALLSELECTED(table | column, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;KEEPFILTERS(table_expr)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;USERELATIONSHIP(col1, col2)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;CROSSFILTER(col1, col2, direction)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;TREATAS(table_expression, column1 [, column2, ...])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;relationship-functions&#34;&gt;Relationship Functions&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Function&lt;/th&gt;&#xA;          &lt;th&gt;Status&lt;/th&gt;&#xA;          &lt;th&gt;Notes&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;RELATED(column)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;RELATEDTABLE(table)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;lookup-functions&#34;&gt;Lookup Functions&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Function&lt;/th&gt;&#xA;          &lt;th&gt;Status&lt;/th&gt;&#xA;          &lt;th&gt;Notes&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;LOOKUPVALUE(result_col, search_col, value, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;CONTAINS(table, col, value, ...)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;logical-functions&#34;&gt;Logical Functions&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Function&lt;/th&gt;&#xA;          &lt;th&gt;Status&lt;/th&gt;&#xA;          &lt;th&gt;Notes&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;IF(condition, true_result [, false_result])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SWITCH(expr, val1, result1, ... [, else])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;AND(a, b)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;OR(a, b)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;NOT(logical)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;TRUE()&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;FALSE()&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;BLANK()&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;math-functions&#34;&gt;Math Functions&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Function&lt;/th&gt;&#xA;          &lt;th&gt;Status&lt;/th&gt;&#xA;          &lt;th&gt;Notes&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ABS(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ROUND(number, digits)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DIVIDE(numerator, denominator [, alternate])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;EVEN(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ODD(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;EXP(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;FACT(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;FLOOR(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;CEILING(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;PI()&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;RAND()&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;RANDBETWEEN(number, number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SQRT(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;TRUNC(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;MOD(number, number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;POWER(number, power)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;LOG(number [, base])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;LOG10(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;INT(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;MROUND(number, multiple)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ROUNDUP(number, digits)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ROUNDDOWN(number, digits)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SIGN(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SIN(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COS(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;TAN(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ASIN(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ACOS(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ATAN(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ATAN2(x, y)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ACOSH(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ACOT(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ACOTH(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ASINH(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ATANH(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;CONVERT(expression, datatype)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COSH(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COT(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COTH(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;CURRENCY(expression)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DEGREES(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;GCD(number, number [, ...])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;LCM(number, number [, ...])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;LN(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;RADIANS(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SINH(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SQRTPI(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;TANH(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;text-functions&#34;&gt;Text Functions&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Function&lt;/th&gt;&#xA;          &lt;th&gt;Status&lt;/th&gt;&#xA;          &lt;th&gt;Notes&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;CONCATENATE(text1, text2)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;CONCATENATEX(table, expr [, delimiter [, orderBy_expr [, order]]])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;LEFT(text, num_chars)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;RIGHT(text, num_chars)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;MID(text, start_num, num_chars)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;LEN(text)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SEARCH(find_text, within_text [, start_num [, not_found_value]])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;FIND(find_text, within_text [, start_num [, not_found_value]])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;REPLACE(old_text, start_num, num_chars, new_text)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SUBSTITUTE(text, old_text, new_text [, instance_num])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;UPPER(text)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;LOWER(text)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;FORMAT(value, format_string)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;TRIM(text)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;CLEAN(text)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;EXACT(text1, text2)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;VALUE(text)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;FIXED(number [, decimals [, no_commas]])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;REPT(text, num_times)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;UNICHAR(number)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;UNICODE(text)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;financial-functions&#34;&gt;Financial Functions&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Function&lt;/th&gt;&#xA;          &lt;th&gt;Status&lt;/th&gt;&#xA;          &lt;th&gt;Notes&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ACCRINT(issue, first_interest, settlement, rate, par, frequency [, basis [, calc_method]])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ACCRINTM(issue, settlement, rate, par [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;AMORDEGRC(cost, purchase_date, first_period, salvage, period, rate [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;AMORLINC(cost, purchase_date, first_period, salvage, period, rate [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COUPDAYBS(settlement, maturity, frequency [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COUPDAYS(settlement, maturity, frequency [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COUPDAYSNC(settlement, maturity, frequency [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COUPNCD(settlement, maturity, frequency [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COUPNUM(settlement, maturity, frequency [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;COUPPCD(settlement, maturity, frequency [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;CUMIPMT(rate, nper, pv, start_period, end_period, type)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;CUMPRINC(rate, nper, pv, start_period, end_period, type)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DB(cost, salvage, life, period [, month])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DDB(cost, salvage, life, period [, factor])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DISC(settlement, maturity, pr, redemption [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DOLLARDE(fractional_dollar, fraction)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DOLLARFR(decimal_dollar, fraction)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;DURATION(settlement, maturity, coupon, yld, frequency [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;EFFECT(nominal_rate, npery)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;FV(rate, nper, pmt [, pv [, type]])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;INTRATE(settlement, maturity, investment, redemption [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;IPMT(rate, per, nper, pv [, fv [, type]])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ISPMT(rate, per, nper, pv)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;MDURATION(settlement, maturity, coupon, yld, frequency [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;NOMINAL(effect_rate, npery)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;NPER(rate, pmt, pv [, fv [, type]])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ODDFPRICE(settlement, maturity, issue, first_coupon, rate, yld, redemption, frequency [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ODDFYIELD(settlement, maturity, issue, first_coupon, rate, pr, redemption, frequency [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ODDLPRICE(settlement, maturity, last_interest, rate, yld, redemption, frequency [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ODDLYIELD(settlement, maturity, last_interest, rate, pr, redemption, frequency [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;PDURATION(rate, pv, fv)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;PMT(rate, nper, pv [, fv [, type]])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;PPMT(rate, per, nper, pv [, fv [, type]])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;PRICE(settlement, maturity, rate, yld, redemption, frequency [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;PRICEDISC(settlement, maturity, discount, redemption [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;PRICEMAT(settlement, maturity, issue, rate, yld [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;PV(rate, nper, pmt [, fv [, type]])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;RATE(nper, pmt, pv [, fv [, type [, guess]]])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;RECEIVED(settlement, maturity, investment, discount [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;RRI(nper, pv, fv)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SLN(cost, salvage, life)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;SYD(cost, salvage, life, per)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;TBILLEQ(settlement, maturity, discount)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;TBILLPRICE(settlement, maturity, discount)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;TBILLYIELD(settlement, maturity, pr)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;VDB(cost, salvage, life, start_period, end_period [, factor [, no_switch]])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;XIRR(values, dates [, guess])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;XNPV(rate, values, dates)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;YIELD(settlement, maturity, rate, pr, redemption, frequency [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;YIELDDISC(settlement, maturity, pr, redemption [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;YIELDMAT(settlement, maturity, issue, rate, pr [, basis])&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Pending&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;other-functions&#34;&gt;Other Functions&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Function&lt;/th&gt;&#xA;          &lt;th&gt;Status&lt;/th&gt;&#xA;          &lt;th&gt;Notes&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;ERROR(text)&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Compliant&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;non-function-features-pending&#34;&gt;Non-function features pending&lt;/h2&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Feature&lt;/th&gt;&#xA;          &lt;th&gt;Complexity&lt;/th&gt;&#xA;          &lt;th&gt;Effort estimate&lt;/th&gt;&#xA;          &lt;th&gt;Notes&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;kpi&lt;/td&gt;&#xA;          &lt;td&gt;Unknown&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;hierarchies&lt;/td&gt;&#xA;          &lt;td&gt;Unknown&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;roles&lt;/td&gt;&#xA;          &lt;td&gt;Unknown&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;          &lt;td&gt;&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;</description>
-    </item>
-    <item>
-      <title>Models REST API</title>
-      <link>https://www.dax.rs/docs/models_api/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://www.dax.rs/docs/models_api/</guid>
-      <description>&lt;h1 id=&#34;models-rest-api&#34;&gt;Models REST API&lt;/h1&gt;&#xA;&lt;p&gt;Base URL: &lt;code&gt;http://localhost:3000&lt;/code&gt;&lt;/p&gt;&#xA;&lt;p&gt;All responses are JSON. Model and table IDs are their names as defined in the TMSL file, percent-encoded when used in a URL path (e.g. a model named &lt;code&gt;Sales Model&lt;/code&gt; becomes &lt;code&gt;Sales%20Model&lt;/code&gt;).&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;endpoints&#34;&gt;Endpoints&lt;/h2&gt;&#xA;&lt;h3 id=&#34;list-models&#34;&gt;List models&lt;/h3&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;GET /models&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Returns all loaded models.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Response &lt;code&gt;200 OK&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;#34;id&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;AdventureWorks&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;AdventureWorks&amp;#34;&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;&#xA;&lt;h3 id=&#34;get-model&#34;&gt;Get model&lt;/h3&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;GET /models/{id}&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Returns metadata for a single model.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Path parameters&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;table&gt;&#xA;  &lt;thead&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;th&gt;Parameter&lt;/th&gt;&#xA;          &lt;th&gt;Description&lt;/th&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/thead&gt;&#xA;  &lt;tbody&gt;&#xA;      &lt;tr&gt;&#xA;          &lt;td&gt;&lt;code&gt;id&lt;/code&gt;&lt;/td&gt;&#xA;          &lt;td&gt;Model name&lt;/td&gt;&#xA;      &lt;/tr&gt;&#xA;  &lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;&lt;strong&gt;Response &lt;code&gt;200 OK&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>TMSL Model</title>
-      <link>https://www.dax.rs/docs/tmsl/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://www.dax.rs/docs/tmsl/</guid>
-      <description>&lt;h1 id=&#34;tmsl-model-documentation&#34;&gt;TMSL Model Documentation&lt;/h1&gt;&#xA;&lt;p&gt;This document describes the subset of Tabular Model Scripting Language (TMSL) that&#xA;&lt;code&gt;dax-rs&lt;/code&gt; can read and write. The format is a JSON file that describes tables,&#xA;columns, measures, and relationships. It maps directly to Power BI Desktop&amp;rsquo;s&#xA;model export format.&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;rust-api&#34;&gt;Rust API&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-rust&#34; data-lang=&#34;rust&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;use&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dax_rs&lt;/span&gt;::&lt;span class=&#34;n&#34;&gt;loaders&lt;/span&gt;::&lt;span class=&#34;n&#34;&gt;tmsl&lt;/span&gt;::&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;load_tmsl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;save_tmsl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;load_tmsl_from_op&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;save_tmsl_to_op&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;use&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dax_rs&lt;/span&gt;::&lt;span class=&#34;n&#34;&gt;catalog&lt;/span&gt;::&lt;span class=&#34;n&#34;&gt;Catalog&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// Load from the local filesystem&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;catalog&lt;/span&gt;: &lt;span class=&#34;nc&#34;&gt;Catalog&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;load_tmsl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;model.json&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;?&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// Save back to disk (round-trips all fields)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;save_tmsl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;model.json&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;catalog&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;?&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// Load / save via an opendal BlockingOperator (S3, Azure Blob, etc.)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;let&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;catalog&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;load_tmsl_from_op&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;op&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;model.json&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;?&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;save_tmsl_to_op&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;op&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;model.json&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;catalog&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;?&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;load_tmsl&lt;/code&gt; deserialises the JSON, validates the schema, and returns a &lt;code&gt;Catalog&lt;/code&gt;.&#xA;It returns an error (not a panic) if the JSON is malformed or any validation rule&#xA;is violated (see &lt;a href=&#34;#validation&#34;&gt;Validation&lt;/a&gt;).&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Launching DAX-rs</title>
-      <link>https://www.dax.rs/blog/launching-dax-rs/</link>
-      <pubDate>Wed, 29 Jul 2026 00:00:00 +0000</pubDate>
-      <guid>https://www.dax.rs/blog/launching-dax-rs/</guid>
-      <description>The journey towards launching the project and considerations for how it is launched.</description>
-    </item>
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>dax.rs | High-Performance DAX/XMLA Server in Rust</title><link>https://www.dax.rs/</link><description>Recent content on dax.rs | High-Performance DAX/XMLA Server in Rust</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 29 Jul 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://www.dax.rs/index.xml" rel="self" type="application/rss+xml"/><item><title>Running</title><link>https://www.dax.rs/docs/running/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.dax.rs/docs/running/</guid><description>&lt;h2 id="run-server">Run server&lt;/h2>
+&lt;p>The server scans &lt;code>--models-root&lt;/code> for every &lt;code>*.json&lt;/code> TMSL file and loads each as a separate model. With no flags at all, it defaults to &lt;code>./demodata&lt;/code> for both models and datasets — generate the demo dataset first with &lt;code>cargo run --bin generate-demodata&lt;/code>, then:&lt;/p>
+&lt;pre tabindex="0">&lt;code>cargo run --bin dax-rs
+&lt;/code>&lt;/pre>&lt;p>Or point it at your own models directory:&lt;/p>
+&lt;pre tabindex="0">&lt;code>cargo run --bin dax-rs -- --models-root /path/to/models --datasets-root /path/to/data
+&lt;/code>&lt;/pre>&lt;p>Key flags:&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>--models-root &amp;lt;dir&amp;gt;&lt;/code> — directory scanned for &lt;code>*.json&lt;/code> TMSL model files, each loaded as a separate model (default: &lt;code>./demodata&lt;/code>)&lt;/li>
+&lt;li>&lt;code>--datasets-root &amp;lt;dir&amp;gt;&lt;/code> — directory containing parquet data files (default: &lt;code>./demodata&lt;/code>)&lt;/li>
+&lt;li>&lt;code>--port &amp;lt;n&amp;gt;&lt;/code> — listen port (default: &lt;code>3000&lt;/code>)&lt;/li>
+&lt;li>&lt;code>--config &amp;lt;file&amp;gt;&lt;/code> — YAML config file path (default: &lt;code>server.yaml&lt;/code> if present)&lt;/li>
+&lt;/ul>
+&lt;h2 id="docker">Docker&lt;/h2>
+&lt;p>Build the image (stable Rust, no extra polars perf flags):&lt;/p></description></item><item><title>Configuration</title><link>https://www.dax.rs/docs/server_config/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.dax.rs/docs/server_config/</guid><description>&lt;h1 id="server-configuration">Server Configuration&lt;/h1>
+&lt;p>The server reads configuration from three sources in increasing priority order:&lt;/p>
+&lt;ol>
+&lt;li>&lt;code>server.yaml&lt;/code> (or the file given by &lt;code>--config&lt;/code> / &lt;code>$DAX_CONFIG&lt;/code>)&lt;/li>
+&lt;li>Environment variables&lt;/li>
+&lt;li>CLI flags&lt;/li>
+&lt;/ol>
+&lt;h2 id="yaml-file">YAML file&lt;/h2>
+&lt;p>By default the server looks for &lt;code>server.yaml&lt;/code> in the working directory. An alternative path can be supplied with &lt;code>--config &amp;lt;path&amp;gt;&lt;/code> or the &lt;code>DAX_CONFIG&lt;/code> environment variable. If the file is absent it is silently skipped.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">server_name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">dax-rs&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">hostname&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">localhost&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">port&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">3000&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">locale_identifier&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">1033&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">log_level&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">info&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">concurrency&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">max_concurrency&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">32&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">max_wait_secs&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">30&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">storage&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">models&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">local&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">root&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">./models&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">datasets&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">local&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">root&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">./data&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The XMLA endpoint URL (&lt;code>http://&amp;lt;hostname&amp;gt;:&amp;lt;port&amp;gt;/xmla&lt;/code>) and the MSOLAP connection string are derived automatically from &lt;code>hostname&lt;/code> and &lt;code>port&lt;/code>.&lt;/p></description></item><item><title>DAX functions</title><link>https://www.dax.rs/docs/dax_functions/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.dax.rs/docs/dax_functions/</guid><description>&lt;h1 id="dax-functions--implementation-status">DAX Functions — Implementation Status&lt;/h1>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Compliant&lt;/th>
+ &lt;th>Partial&lt;/th>
+ &lt;th>Pending&lt;/th>
+ &lt;th>Total&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>122&lt;/td>
+ &lt;td>0&lt;/td>
+ &lt;td>89&lt;/td>
+ &lt;td>211&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;p>Each function is marked &lt;strong>Compliant&lt;/strong> (matches DAX behaviour for all documented inputs), &lt;strong>Partial&lt;/strong> (works for common cases but has known gaps), or &lt;strong>Pending&lt;/strong> (not yet implemented).&lt;/p>
+&lt;hr>
+&lt;h2 id="aggregation-functions">Aggregation Functions&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Function&lt;/th>
+ &lt;th>Status&lt;/th>
+ &lt;th>Notes&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>SUM(column)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COUNT(column)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COUNTA(column)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>AVERAGE(column)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>AVERAGEA(column)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>MIN(column)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>MINA(column)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>MAX(column)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>MAXA(column)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>DISTINCTCOUNT(column)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COUNTROWS(table)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ISEMPTY(table)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>HASONEVALUE(column)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>DISTINCTCOUNTNOBLANK(column)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COUNTBLANK(column)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>PRODUCT(column)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="iterator-x-functions">Iterator (X) Functions&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Function&lt;/th>
+ &lt;th>Status&lt;/th>
+ &lt;th>Notes&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>SUMX(table, expr)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>AVERAGEX(table, expr)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>MAXX(table, expr)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>MINX(table, expr)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COUNTX(table, expr)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COUNTAX(table, expr)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="date-and-time-functions">Date and time functions&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Function&lt;/th>
+ &lt;th>Status&lt;/th>
+ &lt;th>Notes&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>DATE(year, month, day)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>DATEDIFF(date1, date2, interval)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>EDATE(date, months)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>EOMONTH(date, months)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>UTCTODAY()&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>UTCNOW()&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>TODAY()&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>NOW()&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>YEAR(date)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>MONTH(date)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>DAY(date)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>HOUR(date)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>MINUTE(date)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SECOND(date)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>CALENDAR(start, end)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>DATEVALUE(text)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>NETWORKDAYS(start, end [, holidays, weekend])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>QUARTER(date)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>TIME(hour, minute, second)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>TIMEVALUE(text)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>WEEKDAY(date [, return_type])&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>WEEKNUM(date [, return_type])&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>YEARFRAC(start, end [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="table-functions">Table Functions&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Function&lt;/th>
+ &lt;th>Status&lt;/th>
+ &lt;th>Notes&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>FILTER(table, condition)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>VALUES(column | table)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ALL(table | column, ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ALLEXCEPT(table, column, ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>REMOVEFILTERS(table | column, ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SUMMARIZE(table, col, ..., name, expr, ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>DISTINCT(column | table)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ROW(name, expr, ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ADDCOLUMNS(table, name, expr, ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SAMPLE(n, table, orderBy, [order], ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SELECTCOLUMNS(table, name, expr, ...)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>Like &lt;code>ADDCOLUMNS&lt;/code> but starts from an empty table; same row-iteration approach. Medium complexity.&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SUMMARIZECOLUMNS(col, ..., filter, ..., name, expr, ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>GROUPBY(table, col, ..., name, expr, ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>RANKX(table, expr [, value, order, ties])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>Needs a full table scan to build a sorted rank map, then a second pass to look up each row. Medium–high complexity; tie-handling (Skip/Dense) adds branching.&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>TOPN(n, table, expr [, order, ...])&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>GENERATE(table1, table2)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>GENERATEALL(table1, table2)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>CROSSJOIN(table, ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>EXCEPT(table1, table2)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>INTERSECT(table1, table2)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>UNION(table1, table2, ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>NATURALLEFTOUTERJOIN(left, right)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>NATURALINNERJOIN(left, right)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>Same as &lt;code>NATURALLEFTOUTERJOIN&lt;/code> but drops left rows with no right match. Trivial extension once the left-join path exists — swap &lt;code>JoinType::Left&lt;/code> for &lt;code>JoinType::Inner&lt;/code>.&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SUBSTITUTEWITHINDEX(table, name, indexTable, col, order)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="filter-context-functions">Filter Context Functions&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Function&lt;/th>
+ &lt;th>Status&lt;/th>
+ &lt;th>Notes&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>CALCULATE(expr, filter, ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SELECTEDVALUE(column [, alternate])&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ISINSCOPE(column)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ISFILTERED(column)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ALLSELECTED(table | column, ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>KEEPFILTERS(table_expr)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>USERELATIONSHIP(col1, col2)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>CROSSFILTER(col1, col2, direction)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>TREATAS(table_expression, column1 [, column2, ...])&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="relationship-functions">Relationship Functions&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Function&lt;/th>
+ &lt;th>Status&lt;/th>
+ &lt;th>Notes&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>RELATED(column)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>RELATEDTABLE(table)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="lookup-functions">Lookup Functions&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Function&lt;/th>
+ &lt;th>Status&lt;/th>
+ &lt;th>Notes&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>LOOKUPVALUE(result_col, search_col, value, ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>CONTAINS(table, col, value, ...)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="logical-functions">Logical Functions&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Function&lt;/th>
+ &lt;th>Status&lt;/th>
+ &lt;th>Notes&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>IF(condition, true_result [, false_result])&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SWITCH(expr, val1, result1, ... [, else])&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>AND(a, b)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>OR(a, b)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>NOT(logical)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>TRUE()&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>FALSE()&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>BLANK()&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="math-functions">Math Functions&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Function&lt;/th>
+ &lt;th>Status&lt;/th>
+ &lt;th>Notes&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>ABS(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ROUND(number, digits)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>DIVIDE(numerator, denominator [, alternate])&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>EVEN(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ODD(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>EXP(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>FACT(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>FLOOR(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>CEILING(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>PI()&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>RAND()&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>RANDBETWEEN(number, number)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SQRT(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>TRUNC(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>MOD(number, number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>POWER(number, power)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>LOG(number [, base])&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>LOG10(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>INT(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>MROUND(number, multiple)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ROUNDUP(number, digits)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ROUNDDOWN(number, digits)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SIGN(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SIN(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COS(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>TAN(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ASIN(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ACOS(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ATAN(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ATAN2(x, y)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ACOSH(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ACOT(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ACOTH(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ASINH(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ATANH(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>CONVERT(expression, datatype)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COSH(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COT(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COTH(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>CURRENCY(expression)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>DEGREES(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>GCD(number, number [, ...])&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>LCM(number, number [, ...])&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>LN(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>RADIANS(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SINH(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SQRTPI(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>TANH(number)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="text-functions">Text Functions&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Function&lt;/th>
+ &lt;th>Status&lt;/th>
+ &lt;th>Notes&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>CONCATENATE(text1, text2)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>CONCATENATEX(table, expr [, delimiter [, orderBy_expr [, order]]])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>LEFT(text, num_chars)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>RIGHT(text, num_chars)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>MID(text, start_num, num_chars)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>LEN(text)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SEARCH(find_text, within_text [, start_num [, not_found_value]])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>FIND(find_text, within_text [, start_num [, not_found_value]])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>REPLACE(old_text, start_num, num_chars, new_text)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SUBSTITUTE(text, old_text, new_text [, instance_num])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>UPPER(text)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>LOWER(text)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>FORMAT(value, format_string)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>TRIM(text)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>CLEAN(text)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>EXACT(text1, text2)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>VALUE(text)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>FIXED(number [, decimals [, no_commas]])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>REPT(text, num_times)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>UNICHAR(number)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>UNICODE(text)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="financial-functions">Financial Functions&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Function&lt;/th>
+ &lt;th>Status&lt;/th>
+ &lt;th>Notes&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>ACCRINT(issue, first_interest, settlement, rate, par, frequency [, basis [, calc_method]])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ACCRINTM(issue, settlement, rate, par [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>AMORDEGRC(cost, purchase_date, first_period, salvage, period, rate [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>AMORLINC(cost, purchase_date, first_period, salvage, period, rate [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COUPDAYBS(settlement, maturity, frequency [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COUPDAYS(settlement, maturity, frequency [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COUPDAYSNC(settlement, maturity, frequency [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COUPNCD(settlement, maturity, frequency [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COUPNUM(settlement, maturity, frequency [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>COUPPCD(settlement, maturity, frequency [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>CUMIPMT(rate, nper, pv, start_period, end_period, type)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>CUMPRINC(rate, nper, pv, start_period, end_period, type)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>DB(cost, salvage, life, period [, month])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>DDB(cost, salvage, life, period [, factor])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>DISC(settlement, maturity, pr, redemption [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>DOLLARDE(fractional_dollar, fraction)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>DOLLARFR(decimal_dollar, fraction)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>DURATION(settlement, maturity, coupon, yld, frequency [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>EFFECT(nominal_rate, npery)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>FV(rate, nper, pmt [, pv [, type]])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>INTRATE(settlement, maturity, investment, redemption [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>IPMT(rate, per, nper, pv [, fv [, type]])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ISPMT(rate, per, nper, pv)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>MDURATION(settlement, maturity, coupon, yld, frequency [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>NOMINAL(effect_rate, npery)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>NPER(rate, pmt, pv [, fv [, type]])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ODDFPRICE(settlement, maturity, issue, first_coupon, rate, yld, redemption, frequency [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ODDFYIELD(settlement, maturity, issue, first_coupon, rate, pr, redemption, frequency [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ODDLPRICE(settlement, maturity, last_interest, rate, yld, redemption, frequency [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>ODDLYIELD(settlement, maturity, last_interest, rate, pr, redemption, frequency [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>PDURATION(rate, pv, fv)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>PMT(rate, nper, pv [, fv [, type]])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>PPMT(rate, per, nper, pv [, fv [, type]])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>PRICE(settlement, maturity, rate, yld, redemption, frequency [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>PRICEDISC(settlement, maturity, discount, redemption [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>PRICEMAT(settlement, maturity, issue, rate, yld [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>PV(rate, nper, pmt [, fv [, type]])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>RATE(nper, pmt, pv [, fv [, type [, guess]]])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>RECEIVED(settlement, maturity, investment, discount [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>RRI(nper, pv, fv)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SLN(cost, salvage, life)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>SYD(cost, salvage, life, per)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>TBILLEQ(settlement, maturity, discount)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>TBILLPRICE(settlement, maturity, discount)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>TBILLYIELD(settlement, maturity, pr)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>VDB(cost, salvage, life, start_period, end_period [, factor [, no_switch]])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>XIRR(values, dates [, guess])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>XNPV(rate, values, dates)&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>YIELD(settlement, maturity, rate, pr, redemption, frequency [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>YIELDDISC(settlement, maturity, pr, redemption [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>&lt;code>YIELDMAT(settlement, maturity, issue, rate, pr [, basis])&lt;/code>&lt;/td>
+ &lt;td>Pending&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="other-functions">Other Functions&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Function&lt;/th>
+ &lt;th>Status&lt;/th>
+ &lt;th>Notes&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>ERROR(text)&lt;/code>&lt;/td>
+ &lt;td>Compliant&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;hr>
+&lt;h2 id="non-function-features-pending">Non-function features pending&lt;/h2>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Feature&lt;/th>
+ &lt;th>Complexity&lt;/th>
+ &lt;th>Effort estimate&lt;/th>
+ &lt;th>Notes&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>kpi&lt;/td>
+ &lt;td>Unknown&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>hierarchies&lt;/td>
+ &lt;td>Unknown&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;tr>
+ &lt;td>roles&lt;/td>
+ &lt;td>Unknown&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;td>&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table></description></item><item><title>Models REST API</title><link>https://www.dax.rs/docs/models_api/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.dax.rs/docs/models_api/</guid><description>&lt;h1 id="models-rest-api">Models REST API&lt;/h1>
+&lt;p>Base URL: &lt;code>http://localhost:3000&lt;/code>&lt;/p>
+&lt;p>All responses are JSON. Model and table IDs are their names as defined in the TMSL file, percent-encoded when used in a URL path (e.g. a model named &lt;code>Sales Model&lt;/code> becomes &lt;code>Sales%20Model&lt;/code>).&lt;/p>
+&lt;hr>
+&lt;h2 id="endpoints">Endpoints&lt;/h2>
+&lt;h3 id="list-models">List models&lt;/h3>
+&lt;pre tabindex="0">&lt;code>GET /models
+&lt;/code>&lt;/pre>&lt;p>Returns all loaded models.&lt;/p>
+&lt;p>&lt;strong>Response &lt;code>200 OK&lt;/code>&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="line">&lt;span class="cl">&lt;span class="p">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;id&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;AdventureWorks&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;name&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;AdventureWorks&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
+&lt;h3 id="get-model">Get model&lt;/h3>
+&lt;pre tabindex="0">&lt;code>GET /models/{id}
+&lt;/code>&lt;/pre>&lt;p>Returns metadata for a single model.&lt;/p>
+&lt;p>&lt;strong>Path parameters&lt;/strong>&lt;/p>
+&lt;table>
+ &lt;thead>
+ &lt;tr>
+ &lt;th>Parameter&lt;/th>
+ &lt;th>Description&lt;/th>
+ &lt;/tr>
+ &lt;/thead>
+ &lt;tbody>
+ &lt;tr>
+ &lt;td>&lt;code>id&lt;/code>&lt;/td>
+ &lt;td>Model name&lt;/td>
+ &lt;/tr>
+ &lt;/tbody>
+&lt;/table>
+&lt;p>&lt;strong>Response &lt;code>200 OK&lt;/code>&lt;/strong>&lt;/p></description></item><item><title>TMSL Model</title><link>https://www.dax.rs/docs/tmsl/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.dax.rs/docs/tmsl/</guid><description>&lt;h1 id="tmsl-model-documentation">TMSL Model Documentation&lt;/h1>
+&lt;p>This document describes the subset of Tabular Model Scripting Language (TMSL) that
+&lt;code>dax-rs&lt;/code> can read and write. The format is a JSON file that describes tables,
+columns, measures, and relationships. It maps directly to Power BI Desktop&amp;rsquo;s
+model export format.&lt;/p>
+&lt;hr>
+&lt;h2 id="rust-api">Rust API&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-rust" data-lang="rust">&lt;span class="line">&lt;span class="cl">&lt;span class="k">use&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dax_rs&lt;/span>::&lt;span class="n">loaders&lt;/span>::&lt;span class="n">tmsl&lt;/span>::&lt;span class="p">{&lt;/span>&lt;span class="n">load_tmsl&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">save_tmsl&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">load_tmsl_from_op&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">save_tmsl_to_op&lt;/span>&lt;span class="p">};&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">use&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dax_rs&lt;/span>::&lt;span class="n">catalog&lt;/span>::&lt;span class="n">Catalog&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">// Load from the local filesystem
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">let&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">catalog&lt;/span>: &lt;span class="nc">Catalog&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">load_tmsl&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;model.json&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">// Save back to disk (round-trips all fields)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">save_tmsl&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;model.json&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">catalog&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">// Load / save via an opendal BlockingOperator (S3, Azure Blob, etc.)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">let&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">catalog&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">load_tmsl_from_op&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">op&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;model.json&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="n">save_tmsl_to_op&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">op&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s">&amp;#34;model.json&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;amp;&lt;/span>&lt;span class="n">catalog&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>load_tmsl&lt;/code> deserialises the JSON, validates the schema, and returns a &lt;code>Catalog&lt;/code>.
+It returns an error (not a panic) if the JSON is malformed or any validation rule
+is violated (see &lt;a href="#validation">Validation&lt;/a>).&lt;/p></description></item><item><title>Launching DAX-rs</title><link>https://www.dax.rs/blog/launching-dax-rs/</link><pubDate>Wed, 29 Jul 2026 00:00:00 +0000</pubDate><guid>https://www.dax.rs/blog/launching-dax-rs/</guid><description>The journey towards launching the project and considerations for how it is launched.</description></item></channel></rss>

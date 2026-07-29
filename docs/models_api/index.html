@@ -1,954 +1,243 @@
-<!DOCTYPE html>
-<html class="dark" lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Models REST API | dax.rs</title>
-<meta name="description" content="How to interact with the models API to load and update models"/>
-
-<link rel="canonical" href="https://www.dax.rs/docs/models_api/"/>
-<link rel="alternate" type="application/rss+xml" title="dax.rs Blog" href="https://www.dax.rs/blog/index.xml"/>
-
-<meta property="og:site_name" content="dax.rs"/>
-<meta property="og:title" content="Models REST API | dax.rs"/>
-<meta property="og:description" content="How to interact with the models API to load and update models"/>
-<meta property="og:url" content="https://www.dax.rs/docs/models_api/"/>
-<meta property="og:type" content="website"/>
-
-
-
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Models REST API | dax.rs"/>
-<meta name="twitter:description" content="How to interact with the models API to load and update models"/>
-
-
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script>
-  tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        colors: {
-          "error-container": "#93000a",
-          "on-primary": "#003739",
-          "primary-container": "#00f5ff",
-          "secondary": "#6fd6df",
-          "on-background": "#e2e2e6",
-          "on-tertiary-fixed-variant": "#44474d",
-          "primary": "#e9feff",
-          "secondary-container": "#2e9fa8",
-          "primary-fixed": "#63f7ff",
-          "on-surface-variant": "#b9caca",
-          "tertiary": "#faf9ff",
-          "on-secondary-fixed-variant": "#004f54",
-          "on-surface": "#e2e2e6",
-          "on-tertiary-fixed": "#191c22",
-          "outline-variant": "#3a494a",
-          "on-secondary-container": "#002f33",
-          "surface-container-low": "#1a1c1f",
-          "surface-container-highest": "#333538",
-          "on-primary-fixed": "#002021",
-          "on-secondary": "#00363a",
-          "tertiary-fixed": "#e1e2ea",
-          "inverse-surface": "#e2e2e6",
-          "outline": "#849495",
-          "inverse-on-surface": "#2f3034",
-          "secondary-fixed": "#8df2fc",
-          "on-primary-fixed-variant": "#004f53",
-          "surface-dim": "#111317",
-          "on-primary-container": "#006c71",
-          "surface-container-lowest": "#0c0e11",
-          "primary-fixed-dim": "#00dce5",
-          "inverse-primary": "#00696e",
-          "on-secondary-fixed": "#002022",
-          "on-error-container": "#ffdad6",
-          "secondary-fixed-dim": "#6fd6df",
-          "surface": "#111317",
-          "tertiary-container": "#dbdde5",
-          "surface-variant": "#333538",
-          "surface-container-high": "#282a2d",
-          "surface-bright": "#37393d",
-          "tertiary-fixed-dim": "#c4c6ce",
-          "surface-container": "#1e2023",
-          "error": "#ffb4ab",
-          "on-tertiary-container": "#5e6168",
-          "on-error": "#690005",
-          "on-tertiary": "#2d3037",
-          "surface-tint": "#00dce5",
-          "background": "#111317"
-        },
-        borderRadius: {
-          "DEFAULT": "0.25rem",
-          "lg": "0.5rem",
-          "xl": "0.75rem",
-          "full": "9999px"
-        },
-        spacing: {
-          "gutter": "16px",
-          "unit": "4px",
-          "container-max": "1440px",
-          "margin-desktop": "32px",
-          "margin-mobile": "16px"
-        },
-        fontFamily: {
-          "label-caps": ["Hanken Grotesk", "sans-serif"],
-          "headline-lg": ["Hanken Grotesk", "sans-serif"],
-          "body-lg": ["Hanken Grotesk", "sans-serif"],
-          "body-md": ["Hanken Grotesk", "sans-serif"],
-          "headline-md": ["Hanken Grotesk", "sans-serif"],
-          "headline-xl": ["Hanken Grotesk", "sans-serif"],
-          "mono-data": ["monospace"],
-          "body-sm": ["Hanken Grotesk", "sans-serif"],
-          "headline-lg-mobile": ["Hanken Grotesk", "sans-serif"],
-          "code-block": ["JetBrains Mono", "monospace"],
-          "status-indicator": ["JetBrains Mono", "monospace"]
-        },
-        fontSize: {
-          "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
-          "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-          "body-lg": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
-          "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
-          "headline-md": ["20px", {"lineHeight": "1.3", "fontWeight": "600"}],
-          "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-          "mono-data": ["13px", {"lineHeight": "1.0", "fontWeight": "500"}],
-          "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
-          "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
-          "code-block": ["13px", {"lineHeight": "1.5", "fontWeight": "400"}],
-          "status-indicator": ["11px", {"lineHeight": "1.0", "fontWeight": "700"}]
-        }
-      }
-    }
-  }
-</script>
-<link rel="stylesheet" href="/css/main.css"/>
-<script
-    async
-    src="https://pl.dax.rs/js/pa-N4WRzGRFdsnTQvX8dywO9.js"
-></script>
-<script>
-    ((window.plausible =
-        window.plausible ||
-        function () {
-            (plausible.q = plausible.q || []).push(arguments);
-        }),
-        (plausible.init =
-            plausible.init ||
-            function (i) {
-                plausible.o = i || {};
-            }));
-    plausible.init();
-</script>
-
-</head>
-
-<body class="flex min-h-screen font-body-lg text-body-lg selection:bg-surface-tint selection:text-on-primary">
-<a href="#main-content" class="skip-link">Skip to main content</a>
-
-
-
-<aside aria-label="Documentation sidebar" class="h-screen sticky top-0 left-0 w-64 bg-surface-container-lowest border-r border-outline-variant flex flex-col p-6 gap-2 shrink-0">
-  <div class="mb-8">
-    <a href="/" class="font-headline-lg text-headline-lg text-surface-tint block">dax.rs</a>
-    <p class="font-label-caps text-label-caps opacity-50 uppercase tracking-widest mt-1">v0.2.3</p>
-  </div>
-  <nav aria-label="Documentation" class="flex-grow flex flex-col gap-1 overflow-y-auto">
-    <p class="font-label-caps text-label-caps text-secondary-container mb-2 px-1 uppercase">Documentation</p>
-    
-      
-      
-      <a class="flex items-center gap-2 p-2 rounded transition-all font-label-caps text-label-caps uppercase text-on-surface-variant hover:bg-surface-container" href="/docs/running/">
-        <span aria-hidden="true" class="material-symbols-outlined" style="font-size: 20px;">download</span>
-        <span>Running</span>
-      </a>
-      
-      
-      <a class="flex items-center gap-2 p-2 rounded transition-all font-label-caps text-label-caps uppercase text-on-surface-variant hover:bg-surface-container" href="/docs/server_config/">
-        <span aria-hidden="true" class="material-symbols-outlined" style="font-size: 20px;">settings_input_component</span>
-        <span>Configuration</span>
-      </a>
-      
-      
-      <a class="flex items-center gap-2 p-2 rounded transition-all font-label-caps text-label-caps uppercase text-on-surface-variant hover:bg-surface-container" href="/docs/dax_functions/">
-        <span aria-hidden="true" class="material-symbols-outlined" style="font-size: 20px;">terminal</span>
-        <span>DAX functions</span>
-      </a>
-      
-      
-      <a aria-current="page" class="flex items-center gap-2 p-2 rounded transition-all font-label-caps text-label-caps uppercase text-surface-tint font-bold bg-surface-container-highest" href="/docs/models_api/">
-        <span aria-hidden="true" class="material-symbols-outlined" style="font-size: 20px;">verified_user</span>
-        <span>Models REST API</span>
-      </a>
-      
-      
-      <a class="flex items-center gap-2 p-2 rounded transition-all font-label-caps text-label-caps uppercase text-on-surface-variant hover:bg-surface-container" href="/docs/tmsl/">
-        <span aria-hidden="true" class="material-symbols-outlined" style="font-size: 20px;">info</span>
-        <span>TMSL Model</span>
-      </a>
-      
-    
-    <div class="mt-8 pt-6 border-t border-outline-variant">
-      <p class="font-label-caps text-label-caps text-secondary-container mb-2 px-1 uppercase">Reference</p>
-      <a class="flex items-center gap-2 p-2 text-on-surface-variant hover:bg-surface-container transition-colors rounded" href="https://github.com/daxrs/dax-rs/releases">
-        <span aria-hidden="true" class="material-symbols-outlined" style="font-size: 20px;">history</span>
-        <span class="font-label-caps text-label-caps uppercase">Release Notes</span>
-      </a>
-      
-    </div>
-  </nav>
-  <div class="mt-auto pt-4">
-    <a href="https://github.com/daxrs/dax-rs" target="_blank" rel="noopener" class="w-full py-3 px-4 bg-surface-tint text-on-primary font-label-caps text-label-caps rounded uppercase hover:brightness-110 transition-all flex items-center justify-center gap-2 font-bold">
-      <span aria-hidden="true" class="material-symbols-outlined" style="font-size: 16px;">open_in_new</span>
-      View on GitHub
-    </a>
-  </div>
-</aside>
-
-
-<main id="main-content" class="flex-1 flex flex-col relative blueprint-bg">
-
-  
-  <header class="w-full sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant flex justify-between items-center px-8 py-4">
-    <nav aria-label="Main navigation" class="hidden md:flex gap-6 items-center">
-      
-      
-      <a aria-current="page" class="font-body-md text-body-md transition-colors uppercase tracking-tight text-surface-tint font-bold border-b-2 border-surface-tint pb-1" href="/docs/">Docs</a>
-      
-      
-      <a class="font-body-md text-body-md transition-colors uppercase tracking-tight text-on-surface-variant hover:text-on-surface" href="/blog/">Blog</a>
-      
-    </nav>
-    <div class="flex items-center gap-4">
-    
-      <span class="font-label-caps text-label-caps text-secondary-container">v0.2.3</span>
-    </div>
-  </header>
-
-  
-  <div class="flex-grow flex px-8 py-16 w-full gap-12 max-w-[1200px]">
-
-    <article class="flex-1 max-w-[800px]">
-      <div class="mb-12">
-        <div class="flex items-center gap-3 mb-6 flex-wrap">
-          
-          <span class="px-2 py-1 bg-secondary-container text-on-secondary-container font-status-indicator text-status-indicator rounded uppercase tracking-widest">Latest Release</span>
-          
-          
-          <span class="font-label-caps text-label-caps text-on-surface-variant uppercase opacity-60">Last updated: July 2026</span>
-          
-        </div>
-        <h1 class="font-headline-xl text-headline-xl mb-6 text-on-surface">Models REST API</h1>
-        
-        <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed text-lg">How to interact with the models API to load and update models</p>
-        
-      </div>
-
-      <div class="doc-content">
-        <h1 id="models-rest-api">Models REST API</h1>
-<p>Base URL: <code>http://localhost:3000</code></p>
-<p>All responses are JSON. Model and table IDs are their names as defined in the TMSL file, percent-encoded when used in a URL path (e.g. a model named <code>Sales Model</code> becomes <code>Sales%20Model</code>).</p>
-<hr>
-<h2 id="endpoints">Endpoints</h2>
-<h3 id="list-models">List models</h3>
-<pre tabindex="0"><code>GET /models
-</code></pre><p>Returns all loaded models.</p>
-<p><strong>Response <code>200 OK</code></strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">[</span>
-</span></span><span class="line"><span class="cl">  <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;AdventureWorks&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;AdventureWorks&#34;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">]</span>
-</span></span></code></pre></div><hr>
-<h3 id="get-model">Get model</h3>
-<pre tabindex="0"><code>GET /models/{id}
-</code></pre><p>Returns metadata for a single model.</p>
-<p><strong>Path parameters</strong></p>
-<table>
-  <thead>
-      <tr>
-          <th>Parameter</th>
-          <th>Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>id</code></td>
-          <td>Model name</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Response <code>200 OK</code></strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;AdventureWorks&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;AdventureWorks&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;culture&#34;</span><span class="p">:</span> <span class="s2">&#34;en-US&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;collation&#34;</span><span class="p">:</span> <span class="s2">&#34;Latin1_General_100_BIN2&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;compatibility_level&#34;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;default_mode&#34;</span><span class="p">:</span> <span class="s2">&#34;Import&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;state&#34;</span><span class="p">:</span> <span class="s2">&#34;FullyProcessed&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;read_write_mode&#34;</span><span class="p">:</span> <span class="s2">&#34;ReadOnly&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;created_timestamp&#34;</span><span class="p">:</span> <span class="s2">&#34;2026-05-21T09:14:00&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;last_schema_update&#34;</span><span class="p">:</span> <span class="s2">&#34;2026-05-21T09:14:00&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;last_refreshed&#34;</span><span class="p">:</span> <span class="s2">&#34;2026-05-21T09:14:00&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>All three timestamps are formatted as <code>YYYY-MM-DDTHH:MM:SS</code> (UTC). <code>created_timestamp</code> and <code>last_schema_update</code> are set at server start; <code>last_refreshed</code> is updated each time <code>POST /models/{id}/refreshdata</code> completes successfully.</p>
-<p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p>
-<hr>
-<h3 id="list-tables">List tables</h3>
-<pre tabindex="0"><code>GET /models/{id}/tables
-</code></pre><p>Returns all tables in the model, each with their full column list.</p>
-<p><strong>Path parameters</strong></p>
-<table>
-  <thead>
-      <tr>
-          <th>Parameter</th>
-          <th>Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>id</code></td>
-          <td>Model name</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Response <code>200 OK</code></strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">[</span>
-</span></span><span class="line"><span class="cl">  <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;is_hidden&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;columns&#34;</span><span class="p">:</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">      <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;OrderDate&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">        <span class="nt">&#34;data_type&#34;</span><span class="p">:</span> <span class="s2">&#34;dateTime&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">        <span class="nt">&#34;summarize_by&#34;</span><span class="p">:</span> <span class="s2">&#34;None&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">        <span class="nt">&#34;is_hidden&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">        <span class="nt">&#34;is_key&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">        <span class="nt">&#34;is_nullable&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">        <span class="nt">&#34;is_unique&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">        <span class="nt">&#34;format_string&#34;</span><span class="p">:</span> <span class="s2">&#34;dd/MM/yyyy&#34;</span>
-</span></span><span class="line"><span class="cl">      <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">]</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">]</span>
-</span></span></code></pre></div><p>Optional column fields (<code>format_string</code>, <code>display_folder</code>, <code>data_category</code>, <code>description</code>, <code>sort_by_column</code>) are omitted when not set.</p>
-<p>Optional table fields (<code>data_category</code>, <code>description</code>) are omitted when not set.</p>
-<p><strong>Column <code>data_type</code> values:</strong> <code>string</code>, <code>integer</code>, <code>double</code>, <code>boolean</code>, <code>dateTime</code>, <code>base64Binary</code>, <code>unsignedLong</code></p>
-<p><strong>Column <code>summarize_by</code> values:</strong> <code>None</code>, <code>Sum</code>, <code>Min</code>, <code>Max</code>, <code>Count</code>, <code>Average</code>, <code>DistinctCount</code></p>
-<p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p>
-<hr>
-<h3 id="get-table">Get table</h3>
-<pre tabindex="0"><code>GET /models/{id}/tables/{tableId}
-</code></pre><p>Returns a single table with its full column list.</p>
-<p><strong>Path parameters</strong></p>
-<table>
-  <thead>
-      <tr>
-          <th>Parameter</th>
-          <th>Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>id</code></td>
-          <td>Model name</td>
-      </tr>
-      <tr>
-          <td><code>tableId</code></td>
-          <td>Table name</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Response <code>200 OK</code></strong> — same shape as a single entry from <a href="#list-tables">List tables</a>.</p>
-<p><strong>Response <code>404 Not Found</code></strong> — model ID or table ID does not exist.</p>
-<hr>
-<h3 id="list-relationships">List relationships</h3>
-<pre tabindex="0"><code>GET /models/{id}/relationships
-</code></pre><p>Returns all relationships defined in the model.</p>
-<p><strong>Path parameters</strong></p>
-<table>
-  <thead>
-      <tr>
-          <th>Parameter</th>
-          <th>Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>id</code></td>
-          <td>Model name</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Response <code>200 OK</code></strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">[</span>
-</span></span><span class="line"><span class="cl">  <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales_Product&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;from_table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;from_column&#34;</span><span class="p">:</span> <span class="s2">&#34;ProductKey&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;to_table&#34;</span><span class="p">:</span> <span class="s2">&#34;Product&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;to_column&#34;</span><span class="p">:</span> <span class="s2">&#34;ProductKey&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;is_active&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;bidirectional&#34;</span><span class="p">:</span> <span class="kc">false</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">]</span>
-</span></span></code></pre></div><p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p>
-<hr>
-<h3 id="list-measures">List measures</h3>
-<pre tabindex="0"><code>GET /models/{id}/measures
-</code></pre><p>Returns all measures defined in the model.</p>
-<p><strong>Path parameters</strong></p>
-<table>
-  <thead>
-      <tr>
-          <th>Parameter</th>
-          <th>Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>id</code></td>
-          <td>Model name</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Response <code>200 OK</code></strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">[</span>
-</span></span><span class="line"><span class="cl">  <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Total Sales&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;expression&#34;</span><span class="p">:</span> <span class="s2">&#34;SUM(Sales[Amount])&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;is_hidden&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;format_string&#34;</span><span class="p">:</span> <span class="s2">&#34;#,##0.00&#34;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">]</span>
-</span></span></code></pre></div><p>Optional fields (<code>format_string</code>, <code>display_folder</code>, <code>description</code>) are omitted when not set.</p>
-<p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p>
-<hr>
-<h3 id="get-object-dependencies">Get object dependencies</h3>
-<pre tabindex="0"><code>GET /models/{id}/dependencies/{object}
-</code></pre><p>Returns the lineage graph for a measure or column — its upstream inputs, direct downstream consumers, and the full set of transitively impacted measures.</p>
-<p><strong>Path parameters</strong></p>
-<table>
-  <thead>
-      <tr>
-          <th>Parameter</th>
-          <th>Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>id</code></td>
-          <td>Model name</td>
-      </tr>
-      <tr>
-          <td><code>object</code></td>
-          <td>Measure name <strong>or</strong> column reference in <code>Table[Column]</code> format, percent-encoded</td>
-      </tr>
-  </tbody>
-</table>
-<p>Column references must be percent-encoded: <code>Sales[Amount]</code> → <code>Sales%5BAmount%5D</code>. Measure lookup is case-insensitive.</p>
-<p><strong>Response <code>200 OK</code> — measure</strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;object&#34;</span><span class="p">:</span> <span class="s2">&#34;YTD Revenue&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;object_type&#34;</span><span class="p">:</span> <span class="s2">&#34;measure&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;upstream&#34;</span><span class="p">:</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;measures&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;Revenue&#34;</span><span class="p">],</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;columns&#34;</span><span class="p">:</span> <span class="p">[]</span>
-</span></span><span class="line"><span class="cl">  <span class="p">},</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;downstream&#34;</span><span class="p">:</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;measures&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;Revenue Growth %&#34;</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl">  <span class="p">},</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;impacted_measures&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;Revenue Growth %&#34;</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p><strong>Response <code>200 OK</code> — column</strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;object&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales[Amount]&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;object_type&#34;</span><span class="p">:</span> <span class="s2">&#34;column&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;upstream&#34;</span><span class="p">:</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;measures&#34;</span><span class="p">:</span> <span class="p">[],</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;columns&#34;</span><span class="p">:</span> <span class="p">[]</span>
-</span></span><span class="line"><span class="cl">  <span class="p">},</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;downstream&#34;</span><span class="p">:</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;measures&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;Revenue&#34;</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl">  <span class="p">},</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;impacted_measures&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;Revenue&#34;</span><span class="p">,</span> <span class="s2">&#34;YTD Revenue&#34;</span><span class="p">,</span> <span class="s2">&#34;Revenue Growth %&#34;</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p><strong>Field definitions</strong></p>
-<table>
-  <thead>
-      <tr>
-          <th>Field</th>
-          <th>Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>upstream.measures</code></td>
-          <td>Measures directly referenced in this measure&rsquo;s expression</td>
-      </tr>
-      <tr>
-          <td><code>upstream.columns</code></td>
-          <td>Columns directly referenced in this measure&rsquo;s expression. Always empty for column objects</td>
-      </tr>
-      <tr>
-          <td><code>downstream.measures</code></td>
-          <td>Measures that directly reference this object</td>
-      </tr>
-      <tr>
-          <td><code>impacted_measures</code></td>
-          <td>All measures reachable transitively downstream — the full blast radius of a change to this object. Sorted alphabetically</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist, or <code>object</code> is not a known measure or column.</p>
-<hr>
-<h3 id="evaluate-dax">Evaluate DAX</h3>
-<pre tabindex="0"><code>POST /models/{id}/dax/evaluate
+<!doctype html><html class=dark lang=en><head><meta charset=utf-8><meta content="width=device-width,initial-scale=1" name=viewport><title>Models REST API | dax.rs</title><meta name=description content="How to interact with the models API to load and update models"><link rel=canonical href=https://www.dax.rs/docs/models_api/><link rel=alternate type=application/rss+xml title="dax.rs Blog" href=https://www.dax.rs/blog/index.xml><meta property="og:site_name" content="dax.rs"><meta property="og:title" content="Models REST API | dax.rs"><meta property="og:description" content="How to interact with the models API to load and update models"><meta property="og:url" content="https://www.dax.rs/docs/models_api/"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="Models REST API | dax.rs"><meta name=twitter:description content="How to interact with the models API to load and update models"><link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel=stylesheet><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel=stylesheet><link rel=stylesheet href=/css/tailwind.1ef757a562b36c2346ccf7a60b328f5649a77ec69944b24817f835c2dd4f2a06.css integrity="sha256-HvdXpWKzbCNGzPemCzKPVkmnfsaZRLJIF/g1wt1PKgY=" crossorigin=anonymous><script async src=https://pl.dax.rs/js/pa-N4WRzGRFdsnTQvX8dywO9.js></script><script>(window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(e){plausible.o=e||{}}),plausible.init()</script></head><body class="flex min-h-screen font-body-lg text-body-lg selection:bg-surface-tint selection:text-on-primary"><a href=#main-content class=skip-link>Skip to main content</a><aside aria-label="Documentation sidebar" class="h-screen sticky top-0 left-0 w-64 bg-surface-container-lowest border-r border-outline-variant flex flex-col p-6 gap-2 shrink-0"><div class=mb-8><a href=/ class="font-headline-lg text-headline-lg text-surface-tint block">dax.rs</a><p class="font-label-caps text-label-caps opacity-50 uppercase tracking-widest mt-1">v0.2.3</p></div><nav aria-label=Documentation class="flex-grow flex flex-col gap-1 overflow-y-auto"><p class="font-label-caps text-label-caps text-secondary-container mb-2 px-1 uppercase">Documentation</p><a class="flex items-center gap-2 p-2 rounded transition-all font-label-caps text-label-caps uppercase text-on-surface-variant hover:bg-surface-container" href=/docs/running/><span aria-hidden=true class=material-symbols-outlined style=font-size:20px>download</span>
+<span>Running</span>
+</a><a class="flex items-center gap-2 p-2 rounded transition-all font-label-caps text-label-caps uppercase text-on-surface-variant hover:bg-surface-container" href=/docs/server_config/><span aria-hidden=true class=material-symbols-outlined style=font-size:20px>settings_input_component</span>
+<span>Configuration</span>
+</a><a class="flex items-center gap-2 p-2 rounded transition-all font-label-caps text-label-caps uppercase text-on-surface-variant hover:bg-surface-container" href=/docs/dax_functions/><span aria-hidden=true class=material-symbols-outlined style=font-size:20px>terminal</span>
+<span>DAX functions</span>
+</a><a aria-current=page class="flex items-center gap-2 p-2 rounded transition-all font-label-caps text-label-caps uppercase text-surface-tint font-bold bg-surface-container-highest" href=/docs/models_api/><span aria-hidden=true class=material-symbols-outlined style=font-size:20px>verified_user</span>
+<span>Models REST API</span>
+</a><a class="flex items-center gap-2 p-2 rounded transition-all font-label-caps text-label-caps uppercase text-on-surface-variant hover:bg-surface-container" href=/docs/tmsl/><span aria-hidden=true class=material-symbols-outlined style=font-size:20px>info</span>
+<span>TMSL Model</span></a><div class="mt-8 pt-6 border-t border-outline-variant"><p class="font-label-caps text-label-caps text-secondary-container mb-2 px-1 uppercase">Reference</p><a class="flex items-center gap-2 p-2 text-on-surface-variant hover:bg-surface-container transition-colors rounded" href=https://github.com/daxrs/dax-rs/releases><span aria-hidden=true class=material-symbols-outlined style=font-size:20px>history</span>
+<span class="font-label-caps text-label-caps uppercase">Release Notes</span></a></div></nav><div class="mt-auto pt-4"><a href=https://github.com/daxrs/dax-rs target=_blank rel=noopener class="w-full py-3 px-4 bg-surface-tint text-on-primary font-label-caps text-label-caps rounded uppercase hover:brightness-110 transition-all flex items-center justify-center gap-2 font-bold"><span aria-hidden=true class=material-symbols-outlined style=font-size:16px>open_in_new</span>
+View on GitHub</a></div></aside><main id=main-content class="flex-1 flex flex-col relative blueprint-bg"><header class="w-full sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant flex justify-between items-center px-8 py-4"><nav aria-label="Main navigation" class="hidden md:flex gap-6 items-center"><a aria-current=page class="font-body-md text-body-md transition-colors uppercase tracking-tight text-surface-tint font-bold border-b-2 border-surface-tint pb-1" href=/docs/>Docs</a>
+<a class="font-body-md text-body-md transition-colors uppercase tracking-tight text-on-surface-variant hover:text-on-surface" href=/blog/>Blog</a></nav><div class="flex items-center gap-4"><span class="font-label-caps text-label-caps text-secondary-container">v0.2.3</span></div></header><div class="flex-grow flex px-8 py-16 w-full gap-12 max-w-[1200px]"><article class="flex-1 max-w-[800px]"><div class=mb-12><div class="flex items-center gap-3 mb-6 flex-wrap"><span class="px-2 py-1 bg-secondary-container text-on-secondary-container font-status-indicator text-status-indicator rounded uppercase tracking-widest">Latest Release</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase opacity-60">Last updated: July 2026</span></div><h1 class="font-headline-xl text-headline-xl mb-6 text-on-surface">Models REST API</h1><p class="font-body-md text-body-md text-on-surface-variant leading-relaxed text-lg">How to interact with the models API to load and update models</p></div><div class=doc-content><h1 id=models-rest-api>Models REST API</h1><p>Base URL: <code>http://localhost:3000</code></p><p>All responses are JSON. Model and table IDs are their names as defined in the TMSL file, percent-encoded when used in a URL path (e.g. a model named <code>Sales Model</code> becomes <code>Sales%20Model</code>).</p><hr><h2 id=endpoints>Endpoints</h2><h3 id=list-models>List models</h3><pre tabindex=0><code>GET /models
+</code></pre><p>Returns all loaded models.</p><p><strong>Response <code>200 OK</code></strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>[</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;id&#34;</span><span class=p>:</span> <span class=s2>&#34;AdventureWorks&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;AdventureWorks&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>]</span>
+</span></span></code></pre></div><hr><h3 id=get-model>Get model</h3><pre tabindex=0><code>GET /models/{id}
+</code></pre><p>Returns metadata for a single model.</p><p><strong>Path parameters</strong></p><table><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td>Model name</td></tr></tbody></table><p><strong>Response <code>200 OK</code></strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;id&#34;</span><span class=p>:</span> <span class=s2>&#34;AdventureWorks&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;AdventureWorks&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;culture&#34;</span><span class=p>:</span> <span class=s2>&#34;en-US&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;collation&#34;</span><span class=p>:</span> <span class=s2>&#34;Latin1_General_100_BIN2&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;compatibility_level&#34;</span><span class=p>:</span> <span class=mi>1500</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;default_mode&#34;</span><span class=p>:</span> <span class=s2>&#34;Import&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;state&#34;</span><span class=p>:</span> <span class=s2>&#34;FullyProcessed&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;read_write_mode&#34;</span><span class=p>:</span> <span class=s2>&#34;ReadOnly&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;created_timestamp&#34;</span><span class=p>:</span> <span class=s2>&#34;2026-05-21T09:14:00&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;last_schema_update&#34;</span><span class=p>:</span> <span class=s2>&#34;2026-05-21T09:14:00&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;last_refreshed&#34;</span><span class=p>:</span> <span class=s2>&#34;2026-05-21T09:14:00&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>All three timestamps are formatted as <code>YYYY-MM-DDTHH:MM:SS</code> (UTC). <code>created_timestamp</code> and <code>last_schema_update</code> are set at server start; <code>last_refreshed</code> is updated each time <code>POST /models/{id}/refreshdata</code> completes successfully.</p><p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p><hr><h3 id=list-tables>List tables</h3><pre tabindex=0><code>GET /models/{id}/tables
+</code></pre><p>Returns all tables in the model, each with their full column list.</p><p><strong>Path parameters</strong></p><table><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td>Model name</td></tr></tbody></table><p><strong>Response <code>200 OK</code></strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>[</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;id&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;is_hidden&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;columns&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;OrderDate&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;data_type&#34;</span><span class=p>:</span> <span class=s2>&#34;dateTime&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;summarize_by&#34;</span><span class=p>:</span> <span class=s2>&#34;None&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;is_hidden&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;is_key&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;is_nullable&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;is_unique&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nt>&#34;format_string&#34;</span><span class=p>:</span> <span class=s2>&#34;dd/MM/yyyy&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>]</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>]</span>
+</span></span></code></pre></div><p>Optional column fields (<code>format_string</code>, <code>display_folder</code>, <code>data_category</code>, <code>description</code>, <code>sort_by_column</code>) are omitted when not set.</p><p>Optional table fields (<code>data_category</code>, <code>description</code>) are omitted when not set.</p><p><strong>Column <code>data_type</code> values:</strong> <code>string</code>, <code>integer</code>, <code>double</code>, <code>boolean</code>, <code>dateTime</code>, <code>base64Binary</code>, <code>unsignedLong</code></p><p><strong>Column <code>summarize_by</code> values:</strong> <code>None</code>, <code>Sum</code>, <code>Min</code>, <code>Max</code>, <code>Count</code>, <code>Average</code>, <code>DistinctCount</code></p><p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p><hr><h3 id=get-table>Get table</h3><pre tabindex=0><code>GET /models/{id}/tables/{tableId}
+</code></pre><p>Returns a single table with its full column list.</p><p><strong>Path parameters</strong></p><table><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td>Model name</td></tr><tr><td><code>tableId</code></td><td>Table name</td></tr></tbody></table><p><strong>Response <code>200 OK</code></strong> — same shape as a single entry from <a href=#list-tables>List tables</a>.</p><p><strong>Response <code>404 Not Found</code></strong> — model ID or table ID does not exist.</p><hr><h3 id=list-relationships>List relationships</h3><pre tabindex=0><code>GET /models/{id}/relationships
+</code></pre><p>Returns all relationships defined in the model.</p><p><strong>Path parameters</strong></p><table><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td>Model name</td></tr></tbody></table><p><strong>Response <code>200 OK</code></strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>[</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales_Product&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;from_table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;from_column&#34;</span><span class=p>:</span> <span class=s2>&#34;ProductKey&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;to_table&#34;</span><span class=p>:</span> <span class=s2>&#34;Product&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;to_column&#34;</span><span class=p>:</span> <span class=s2>&#34;ProductKey&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;is_active&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;bidirectional&#34;</span><span class=p>:</span> <span class=kc>false</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>]</span>
+</span></span></code></pre></div><p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p><hr><h3 id=list-measures>List measures</h3><pre tabindex=0><code>GET /models/{id}/measures
+</code></pre><p>Returns all measures defined in the model.</p><p><strong>Path parameters</strong></p><table><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td>Model name</td></tr></tbody></table><p><strong>Response <code>200 OK</code></strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>[</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Total Sales&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;expression&#34;</span><span class=p>:</span> <span class=s2>&#34;SUM(Sales[Amount])&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;is_hidden&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;format_string&#34;</span><span class=p>:</span> <span class=s2>&#34;#,##0.00&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>]</span>
+</span></span></code></pre></div><p>Optional fields (<code>format_string</code>, <code>display_folder</code>, <code>description</code>) are omitted when not set.</p><p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p><hr><h3 id=get-object-dependencies>Get object dependencies</h3><pre tabindex=0><code>GET /models/{id}/dependencies/{object}
+</code></pre><p>Returns the lineage graph for a measure or column — its upstream inputs, direct downstream consumers, and the full set of transitively impacted measures.</p><p><strong>Path parameters</strong></p><table><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td>Model name</td></tr><tr><td><code>object</code></td><td>Measure name <strong>or</strong> column reference in <code>Table[Column]</code> format, percent-encoded</td></tr></tbody></table><p>Column references must be percent-encoded: <code>Sales[Amount]</code> → <code>Sales%5BAmount%5D</code>. Measure lookup is case-insensitive.</p><p><strong>Response <code>200 OK</code> — measure</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;object&#34;</span><span class=p>:</span> <span class=s2>&#34;YTD Revenue&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;object_type&#34;</span><span class=p>:</span> <span class=s2>&#34;measure&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;upstream&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;measures&#34;</span><span class=p>:</span> <span class=p>[</span><span class=s2>&#34;Revenue&#34;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;columns&#34;</span><span class=p>:</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;downstream&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;measures&#34;</span><span class=p>:</span> <span class=p>[</span><span class=s2>&#34;Revenue Growth %&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;impacted_measures&#34;</span><span class=p>:</span> <span class=p>[</span><span class=s2>&#34;Revenue Growth %&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p><strong>Response <code>200 OK</code> — column</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;object&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales[Amount]&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;object_type&#34;</span><span class=p>:</span> <span class=s2>&#34;column&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;upstream&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;measures&#34;</span><span class=p>:</span> <span class=p>[],</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;columns&#34;</span><span class=p>:</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;downstream&#34;</span><span class=p>:</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;measures&#34;</span><span class=p>:</span> <span class=p>[</span><span class=s2>&#34;Revenue&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>  <span class=p>},</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;impacted_measures&#34;</span><span class=p>:</span> <span class=p>[</span><span class=s2>&#34;Revenue&#34;</span><span class=p>,</span> <span class=s2>&#34;YTD Revenue&#34;</span><span class=p>,</span> <span class=s2>&#34;Revenue Growth %&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p><strong>Field definitions</strong></p><table><thead><tr><th>Field</th><th>Description</th></tr></thead><tbody><tr><td><code>upstream.measures</code></td><td>Measures directly referenced in this measure&rsquo;s expression</td></tr><tr><td><code>upstream.columns</code></td><td>Columns directly referenced in this measure&rsquo;s expression. Always empty for column objects</td></tr><tr><td><code>downstream.measures</code></td><td>Measures that directly reference this object</td></tr><tr><td><code>impacted_measures</code></td><td>All measures reachable transitively downstream — the full blast radius of a change to this object. Sorted alphabetically</td></tr></tbody></table><p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist, or <code>object</code> is not a known measure or column.</p><hr><h3 id=evaluate-dax>Evaluate DAX</h3><pre tabindex=0><code>POST /models/{id}/dax/evaluate
 Content-Type: text/plain
-</code></pre><p>Executes a DAX query against the model and returns the tabular result. A query may contain multiple <code>EVALUATE</code> statements; each produces one result table in the response array.</p>
-<p><strong>Path parameters</strong></p>
-<table>
-  <thead>
-      <tr>
-          <th>Parameter</th>
-          <th>Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>id</code></td>
-          <td>Model name</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Request body</strong></p>
-<p>Raw DAX query text:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dax" data-lang="dax"><span class="line"><span class="cl">EVALUATE
-</span></span><span class="line"><span class="cl"><span class="nf">SUMMARIZECOLUMNS</span><span class="p">(</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="na">&#39;Product&#39;[Color]</span><span class="o">,</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="s">&#34;Revenue&#34;</span><span class="o">,</span><span class="w"> </span><span class="na">[Total Sales]</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w">
-</span></span></span></code></pre></div><p><strong>Response <code>200 OK</code></strong></p>
-<p>An array — one entry per <code>EVALUATE</code> statement in the query:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">[</span>
-</span></span><span class="line"><span class="cl">  <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;columns&#34;</span><span class="p">:</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">      <span class="p">{</span> <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Product[Color]&#34;</span><span class="p">,</span> <span class="nt">&#34;data_type&#34;</span><span class="p">:</span> <span class="s2">&#34;string&#34;</span> <span class="p">},</span>
-</span></span><span class="line"><span class="cl">      <span class="p">{</span> <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Revenue&#34;</span><span class="p">,</span>        <span class="nt">&#34;data_type&#34;</span><span class="p">:</span> <span class="s2">&#34;double&#34;</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">],</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&#34;rows&#34;</span><span class="p">:</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">      <span class="p">[</span><span class="s2">&#34;Blue&#34;</span><span class="p">,</span> <span class="s2">&#34;1234.50&#34;</span><span class="p">],</span>
-</span></span><span class="line"><span class="cl">      <span class="p">[</span><span class="s2">&#34;Red&#34;</span><span class="p">,</span>  <span class="kc">null</span><span class="p">],</span>
-</span></span><span class="line"><span class="cl">      <span class="p">[</span><span class="s2">&#34;Green&#34;</span><span class="p">,</span><span class="s2">&#34;780.00&#34;</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl">    <span class="p">]</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">]</span>
-</span></span></code></pre></div><p>All values are serialised as strings. <code>null</code> indicates a blank or missing cell. Column <code>data_type</code> values match those used by the <a href="#list-tables">List tables</a> endpoint (<code>string</code>, <code>integer</code>, <code>double</code>, <code>boolean</code>, <code>dateTime</code>, etc.).</p>
-<p><strong>Response <code>400 Bad Request</code></strong></p>
-<p>Returned when the DAX engine rejects the query (parse failure, evaluation error, etc.):</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;error&#34;</span><span class="p">:</span> <span class="s2">&#34;Unknown column: Sales.Amountt&#34;</span> <span class="p">}</span>
-</span></span></code></pre></div><p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p>
-<hr>
-<h3 id="validate-dax">Validate DAX</h3>
-<pre tabindex="0"><code>POST /models/{id}/dax/validate
+</code></pre><p>Executes a DAX query against the model and returns the tabular result. A query may contain multiple <code>EVALUATE</code> statements; each produces one result table in the response array.</p><p><strong>Path parameters</strong></p><table><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td>Model name</td></tr></tbody></table><p><strong>Request body</strong></p><p>Raw DAX query text:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-dax data-lang=dax><span class=line><span class=cl>EVALUATE
+</span></span><span class=line><span class=cl><span class=nf>SUMMARIZECOLUMNS</span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=na>&#39;Product&#39;[Color]</span><span class=o>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;Revenue&#34;</span><span class=o>,</span><span class=w> </span><span class=na>[Total Sales]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>)</span><span class=w>
+</span></span></span></code></pre></div><p><strong>Response <code>200 OK</code></strong></p><p>An array — one entry per <code>EVALUATE</code> statement in the query:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>[</span>
+</span></span><span class=line><span class=cl>  <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;columns&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=p>{</span> <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Product[Color]&#34;</span><span class=p>,</span> <span class=nt>&#34;data_type&#34;</span><span class=p>:</span> <span class=s2>&#34;string&#34;</span> <span class=p>},</span>
+</span></span><span class=line><span class=cl>      <span class=p>{</span> <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Revenue&#34;</span><span class=p>,</span>        <span class=nt>&#34;data_type&#34;</span><span class=p>:</span> <span class=s2>&#34;double&#34;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;rows&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>      <span class=p>[</span><span class=s2>&#34;Blue&#34;</span><span class=p>,</span> <span class=s2>&#34;1234.50&#34;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>      <span class=p>[</span><span class=s2>&#34;Red&#34;</span><span class=p>,</span>  <span class=kc>null</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>      <span class=p>[</span><span class=s2>&#34;Green&#34;</span><span class=p>,</span><span class=s2>&#34;780.00&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=p>]</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>]</span>
+</span></span></code></pre></div><p>All values are serialised as strings. <code>null</code> indicates a blank or missing cell. Column <code>data_type</code> values match those used by the <a href=#list-tables>List tables</a> endpoint (<code>string</code>, <code>integer</code>, <code>double</code>, <code>boolean</code>, <code>dateTime</code>, etc.).</p><p><strong>Response <code>400 Bad Request</code></strong></p><p>Returned when the DAX engine rejects the query (parse failure, evaluation error, etc.):</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;error&#34;</span><span class=p>:</span> <span class=s2>&#34;Unknown column: Sales.Amountt&#34;</span> <span class=p>}</span>
+</span></span></code></pre></div><p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p><hr><h3 id=validate-dax>Validate DAX</h3><pre tabindex=0><code>POST /models/{id}/dax/validate
 Content-Type: text/plain
-</code></pre><p>Validates a DAX query against the model without executing it. Three phases run in order — a later phase only runs if the earlier one passes:</p>
-<ol>
-<li><strong>Syntax</strong> — the query must be parseable DAX (<code>EVALUATE ...</code>, optionally with a <code>DEFINE</code> block).</li>
-<li><strong>Semantic</strong> — all column references (<code>Table[Column]</code>), table references, and function names must exist in the model.</li>
-<li><strong>Type</strong> — argument types must satisfy each function&rsquo;s signature.</li>
-</ol>
-<p><strong>Path parameters</strong></p>
-<table>
-  <thead>
-      <tr>
-          <th>Parameter</th>
-          <th>Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>id</code></td>
-          <td>Model name</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Request body</strong></p>
-<p>Raw DAX query text, for example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dax" data-lang="dax"><span class="line"><span class="cl">EVALUATE
-</span></span><span class="line"><span class="cl"><span class="nf">SUMMARIZECOLUMNS</span><span class="p">(</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="na">&#39;Product&#39;[Color]</span><span class="o">,</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="s">&#34;Revenue&#34;</span><span class="o">,</span><span class="w"> </span><span class="na">[Total Sales]</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w">
-</span></span></span></code></pre></div><p><strong>Response <code>200 OK</code> — valid query</strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;valid&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errors&#34;</span><span class="p">:</span> <span class="p">[]</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p><strong>Response <code>200 OK</code> — invalid query</strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;valid&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errors&#34;</span><span class="p">:</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="nt">&#34;kind&#34;</span><span class="p">:</span> <span class="s2">&#34;syntax&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">      <span class="nt">&#34;message&#34;</span><span class="p">:</span> <span class="s2">&#34; --&gt; 1:9\n  |\n1 | EVALUTE ...\n  |         ^---\n  |\n  = expected ...&#34;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">},</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="nt">&#34;kind&#34;</span><span class="p">:</span> <span class="s2">&#34;semantic&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">      <span class="nt">&#34;message&#34;</span><span class="p">:</span> <span class="s2">&#34;Unknown column: Sales.Amountt&#34;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">},</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="nt">&#34;kind&#34;</span><span class="p">:</span> <span class="s2">&#34;type&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">      <span class="nt">&#34;message&#34;</span><span class="p">:</span> <span class="s2">&#34;Type error: ...&#34;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>The endpoint always returns <code>200 OK</code>. Errors are reported in the body, not via HTTP status codes. Multiple errors can be returned when more than one expression fails to bind.</p>
-<p><strong>Error <code>kind</code> values</strong></p>
-<table>
-  <thead>
-      <tr>
-          <th>Value</th>
-          <th>Meaning</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>syntax</code></td>
-          <td>The query could not be parsed. Only one error is returned and later phases are skipped</td>
-      </tr>
-      <tr>
-          <td><code>semantic</code></td>
-          <td>An unknown column, table, function, or identifier. May appear multiple times</td>
-      </tr>
-      <tr>
-          <td><code>type</code></td>
-          <td>A function received arguments of incompatible types. May appear multiple times</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p>
-<hr>
-<h3 id="refresh-data">Refresh data</h3>
-<pre tabindex="0"><code>POST /models/{id}/refreshdata
-</code></pre><p>Reloads all Parquet data sources for the model into memory. Safe to call while queries are in-flight — new data is loaded into a temporary buffer first and swapped in atomically after all tables succeed. If any table fails to load, the existing in-memory data is left untouched and an error is returned.</p>
-<p>Updates the <code>last_refreshed</code> timestamp on the model. Does <strong>not</strong> affect <code>last_schema_update</code>.</p>
-<p><strong>Path parameters</strong></p>
-<table>
-  <thead>
-      <tr>
-          <th>Parameter</th>
-          <th>Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>id</code></td>
-          <td>Model name</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Response <code>204 No Content</code></strong> — all tables reloaded successfully.</p>
-<p><strong>Response <code>500 Internal Server Error</code></strong> — plain-text error message describing which table failed and why.</p>
-<p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p>
-<hr>
-<h3 id="run-commands">Run commands</h3>
-<pre tabindex="0"><code>POST /models/{id}/commands
-</code></pre><p>Applies a list of schema-mutation commands to the model. Commands execute sequentially; on the first error, execution stops and the error is returned.</p>
-<p><strong>Path parameters</strong></p>
-<table>
-  <thead>
-      <tr>
-          <th>Parameter</th>
-          <th>Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><code>id</code></td>
-          <td>Model name</td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Request body</strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;dryRun&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;commands&#34;</span><span class="p">:</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;...&#34;</span><span class="p">,</span> <span class="err">...</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>Set <code>dryRun: true</code> to validate and simulate commands without persisting changes.</p>
-<p><strong>Response <code>200 OK</code></strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;dryRun&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;applied&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;errors&#34;</span><span class="p">:</span> <span class="p">[]</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p><code>applied</code> is the number of commands that succeeded before the first error (or the total if all succeeded). <code>errors</code> contains at most one entry (the first failure).</p>
-<p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p>
-<hr>
-<h2 id="commands-reference">Commands reference</h2>
-<p>All commands share a <code>&quot;type&quot;</code> discriminator field. Unrecognised types are rejected at parse time.</p>
-<h3 id="model-commands">Model commands</h3>
-<h4 id="renamemodel"><code>RenameModel</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;RenameModel&#34;</span><span class="p">,</span> <span class="nt">&#34;newName&#34;</span><span class="p">:</span> <span class="s2">&#34;NewModelName&#34;</span> <span class="p">}</span>
-</span></span></code></pre></div><h4 id="setmodelproperty"><code>SetModelProperty</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetModelProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;culture&#34;</span><span class="p">:</span> <span class="s2">&#34;fr-FR&#34;</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetModelProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;collation&#34;</span><span class="p">:</span> <span class="s2">&#34;Latin1_General_100_BIN2&#34;</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetModelProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;defaultMode&#34;</span><span class="p">:</span> <span class="s2">&#34;DirectQuery&#34;</span> <span class="p">}</span> <span class="p">}</span>
-</span></span></code></pre></div><p>The <code>property</code> field is an externally-tagged union — exactly one key naming the property, with its typed value.</p>
-<hr>
-<h3 id="table-commands">Table commands</h3>
-<h4 id="createtable"><code>CreateTable</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;CreateTable&#34;</span><span class="p">,</span> <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;NewTable&#34;</span> <span class="p">}</span>
-</span></span></code></pre></div><h4 id="deletetable"><code>DeleteTable</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;DeleteTable&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span> <span class="p">}</span>
-</span></span></code></pre></div><h4 id="renametable"><code>RenameTable</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;RenameTable&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;newName&#34;</span><span class="p">:</span> <span class="s2">&#34;Orders&#34;</span> <span class="p">}</span>
-</span></span></code></pre></div><h4 id="settableproperty"><code>SetTableProperty</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetTableProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;isHidden&#34;</span><span class="p">:</span> <span class="kc">true</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetTableProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;Main fact table&#34;</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetTableProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="kc">null</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetTableProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;dataCategory&#34;</span><span class="p">:</span> <span class="s2">&#34;Time&#34;</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetTableProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;dataCategory&#34;</span><span class="p">:</span> <span class="kc">null</span> <span class="p">}</span> <span class="p">}</span>
-</span></span></code></pre></div><p>Pass <code>null</code> for optional string/category properties to clear them.</p>
-<hr>
-<h3 id="column-commands">Column commands</h3>
-<h4 id="addcolumn"><code>AddColumn</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;AddColumn&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;dataType&#34;</span><span class="p">:</span> <span class="s2">&#34;double&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;isHidden&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;isNullable&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;isKey&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;isUnique&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;summarizeBy&#34;</span><span class="p">:</span> <span class="s2">&#34;Sum&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;formatString&#34;</span><span class="p">:</span> <span class="s2">&#34;#,##0.00&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;displayFolder&#34;</span><span class="p">:</span> <span class="s2">&#34;Financials&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;Sale amount in base currency&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>Optional fields: <code>summarizeBy</code> (default <code>None</code>), <code>formatString</code>, <code>displayFolder</code>, <code>description</code>.</p>
-<p><strong><code>dataType</code> values:</strong> <code>string</code>, <code>int64</code>, <code>double</code>, <code>decimal</code>, <code>dateTime</code>, <code>boolean</code>, <code>binary</code></p>
-<h4 id="deletecolumn"><code>DeleteColumn</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;DeleteColumn&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span> <span class="p">}</span>
-</span></span></code></pre></div><h4 id="renamecolumn"><code>RenameColumn</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;RenameColumn&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amt&#34;</span><span class="p">,</span> <span class="nt">&#34;newName&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span> <span class="p">}</span>
-</span></span></code></pre></div><h4 id="changecolumntype"><code>ChangeColumnType</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;ChangeColumnType&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span><span class="p">,</span> <span class="nt">&#34;dataType&#34;</span><span class="p">:</span> <span class="s2">&#34;double&#34;</span> <span class="p">}</span>
-</span></span></code></pre></div><h4 id="setcolumnproperty"><code>SetColumnProperty</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetColumnProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;isHidden&#34;</span><span class="p">:</span> <span class="kc">true</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetColumnProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;Sale amount&#34;</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetColumnProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="kc">null</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetColumnProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;formatString&#34;</span><span class="p">:</span> <span class="s2">&#34;#,##0.00&#34;</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetColumnProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;formatString&#34;</span><span class="p">:</span> <span class="kc">null</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetColumnProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;displayFolder&#34;</span><span class="p">:</span> <span class="s2">&#34;Financials&#34;</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetColumnProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;displayFolder&#34;</span><span class="p">:</span> <span class="kc">null</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetColumnProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;dataCategory&#34;</span><span class="p">:</span> <span class="s2">&#34;WebUrl&#34;</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetColumnProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;dataCategory&#34;</span><span class="p">:</span> <span class="kc">null</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetColumnProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;sortByColumn&#34;</span><span class="p">:</span> <span class="s2">&#34;SortKey&#34;</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetColumnProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;sortByColumn&#34;</span><span class="p">:</span> <span class="kc">null</span> <span class="p">}</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetColumnProperty&#34;</span><span class="p">,</span> <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;column&#34;</span><span class="p">:</span> <span class="s2">&#34;Amount&#34;</span><span class="p">,</span> <span class="nt">&#34;property&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&#34;summarizeBy&#34;</span><span class="p">:</span> <span class="s2">&#34;Sum&#34;</span> <span class="p">}</span> <span class="p">}</span>
-</span></span></code></pre></div><p>Pass <code>null</code> for optional properties to clear them. <code>isHidden</code> and <code>summarizeBy</code> do not accept <code>null</code>.</p>
-<p><strong><code>summarizeBy</code> values:</strong> <code>none</code>, <code>sum</code>, <code>min</code>, <code>max</code>, <code>count</code>, <code>average</code>, <code>distinctCount</code></p>
-<p><strong><code>dataCategory</code> values:</strong> <code>Address</code>, <code>City</code>, <code>Continent</code>, <code>Country</code>, <code>County</code>, <code>Latitude</code>, <code>Longitude</code>, <code>Place</code>, <code>PostalCode</code>, <code>StateOrProvince</code>, <code>WebUrl</code>, <code>ImageUrl</code>, <code>Barcode</code>, <code>PhoneNumber</code>, <code>Organization</code>, <code>FaceUri</code>, or any custom string.</p>
-<hr>
-<h3 id="measure-commands">Measure commands</h3>
-<h4 id="createmeasure"><code>CreateMeasure</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;CreateMeasure&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;table&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Total Sales&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;expression&#34;</span><span class="p">:</span> <span class="s2">&#34;SUM(Sales[Amount])&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;formatString&#34;</span><span class="p">:</span> <span class="s2">&#34;#,##0.00&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;displayFolder&#34;</span><span class="p">:</span> <span class="s2">&#34;KPIs&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;Sum of all sale amounts&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;isHidden&#34;</span><span class="p">:</span> <span class="kc">false</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>Optional fields: <code>formatString</code>, <code>displayFolder</code>, <code>description</code>, <code>isHidden</code> (default <code>false</code>).</p>
-<h4 id="deletemeasure"><code>DeleteMeasure</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;DeleteMeasure&#34;</span><span class="p">,</span> <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Total Sales&#34;</span> <span class="p">}</span>
-</span></span></code></pre></div><h4 id="renamemeasure"><code>RenameMeasure</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;RenameMeasure&#34;</span><span class="p">,</span> <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Total Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;newName&#34;</span><span class="p">:</span> <span class="s2">&#34;Revenue&#34;</span> <span class="p">}</span>
-</span></span></code></pre></div><h4 id="updatemeasureexpression"><code>UpdateMeasureExpression</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;UpdateMeasureExpression&#34;</span><span class="p">,</span> <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Total Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;expression&#34;</span><span class="p">:</span> <span class="s2">&#34;SUMX(Sales, Sales[Amount])&#34;</span> <span class="p">}</span>
-</span></span></code></pre></div><h4 id="setmeasureformatstring"><code>SetMeasureFormatString</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;SetMeasureFormatString&#34;</span><span class="p">,</span> <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Total Sales&#34;</span><span class="p">,</span> <span class="nt">&#34;formatString&#34;</span><span class="p">:</span> <span class="s2">&#34;#,##0.00&#34;</span> <span class="p">}</span>
-</span></span></code></pre></div><hr>
-<h3 id="relationship-commands">Relationship commands</h3>
-<h4 id="createrelationship"><code>CreateRelationship</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;CreateRelationship&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales_Product&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;fromTable&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;fromColumn&#34;</span><span class="p">:</span> <span class="s2">&#34;ProductKey&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;toTable&#34;</span><span class="p">:</span> <span class="s2">&#34;Product&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;toColumn&#34;</span><span class="p">:</span> <span class="s2">&#34;ProductKey&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;isActive&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nt">&#34;bidirectional&#34;</span><span class="p">:</span> <span class="kc">false</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p><code>isActive</code> defaults to <code>true</code>, <code>bidirectional</code> defaults to <code>false</code>.</p>
-<h4 id="deleterelationship"><code>DeleteRelationship</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;DeleteRelationship&#34;</span><span class="p">,</span> <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales_Product&#34;</span> <span class="p">}</span>
-</span></span></code></pre></div><h4 id="updaterelationship"><code>UpdateRelationship</code></h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;UpdateRelationship&#34;</span><span class="p">,</span> <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales_Product&#34;</span><span class="p">,</span> <span class="nt">&#34;isActive&#34;</span><span class="p">:</span> <span class="kc">false</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;UpdateRelationship&#34;</span><span class="p">,</span> <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales_Product&#34;</span><span class="p">,</span> <span class="nt">&#34;bidirectional&#34;</span><span class="p">:</span> <span class="kc">true</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;UpdateRelationship&#34;</span><span class="p">,</span> <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Sales_Product&#34;</span><span class="p">,</span> <span class="nt">&#34;isActive&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nt">&#34;bidirectional&#34;</span><span class="p">:</span> <span class="kc">false</span> <span class="p">}</span>
-</span></span></code></pre></div><p>All fields except <code>name</code> are optional — omit to leave unchanged.</p>
-
-      </div>
-
-      <nav aria-label="Page navigation" class="mt-16 pt-8 border-t border-outline-variant flex justify-between gap-gutter">
-        
-        <a href="/docs/tmsl/" class="flex items-center gap-2 text-on-surface-variant hover:text-surface-tint transition-colors max-w-[45%]">
-          <span aria-hidden="true" class="material-symbols-outlined shrink-0">arrow_back</span>
-          <div>
-            <div class="font-label-caps text-label-caps uppercase opacity-60">Previous</div>
-            <div class="font-headline-md text-headline-md line-clamp-1">TMSL Model</div>
-          </div>
-        </a>
-        
-        
-        <a href="/docs/dax_functions/" class="flex items-center gap-2 text-right text-on-surface-variant hover:text-surface-tint transition-colors max-w-[45%] ml-auto">
-          <div>
-            <div class="font-label-caps text-label-caps uppercase opacity-60">Next</div>
-            <div class="font-headline-md text-headline-md line-clamp-1">DAX functions</div>
-          </div>
-          <span aria-hidden="true" class="material-symbols-outlined shrink-0">arrow_forward</span>
-        </a>
-        
-      </nav>
-    </article>
-
-    
-    
-    <aside aria-label="Table of contents" class="hidden lg:block w-64 h-fit sticky top-24">
-      <div class="border-l border-outline-variant pl-6">
-        <p class="font-label-caps text-label-caps text-secondary-container mb-6 uppercase tracking-widest">On this page</p>
-        <div class="toc"><nav id="TableOfContents">
-  <ul>
-    <li><a href="#endpoints">Endpoints</a>
-      <ul>
-        <li><a href="#list-models">List models</a></li>
-        <li><a href="#get-model">Get model</a></li>
-        <li><a href="#list-tables">List tables</a></li>
-        <li><a href="#get-table">Get table</a></li>
-        <li><a href="#list-relationships">List relationships</a></li>
-        <li><a href="#list-measures">List measures</a></li>
-        <li><a href="#get-object-dependencies">Get object dependencies</a></li>
-        <li><a href="#evaluate-dax">Evaluate DAX</a></li>
-        <li><a href="#validate-dax">Validate DAX</a></li>
-        <li><a href="#refresh-data">Refresh data</a></li>
-        <li><a href="#run-commands">Run commands</a></li>
-      </ul>
-    </li>
-    <li><a href="#commands-reference">Commands reference</a>
-      <ul>
-        <li><a href="#model-commands">Model commands</a></li>
-        <li><a href="#table-commands">Table commands</a></li>
-        <li><a href="#column-commands">Column commands</a></li>
-        <li><a href="#measure-commands">Measure commands</a></li>
-        <li><a href="#relationship-commands">Relationship commands</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav></div>
-        
-      </div>
-    </aside>
-    
-
-  </div>
-
-  <footer class="bg-surface-container-lowest w-full py-margin-desktop mt-auto border-t border-outline-variant">
-  <div class="grid grid-cols-2 md:grid-cols-4 px-margin-desktop max-w-[1280px] mx-auto gap-margin-desktop">
-    <div class="col-span-2 md:col-span-1">
-      <span class="font-label-caps text-label-caps text-surface-tint block mb-gutter">dax.rs</span>
-      <p class="text-body-sm text-on-surface-variant opacity-80 leading-relaxed">
-        © 2026 dax.rs contributors. Built with Rust.
-      </p>
-    </div>
-    <div>
-      <h4 class="font-label-caps text-label-caps text-on-surface mb-gutter">Community</h4>
-      <ul class="space-y-unit">
-        <li><a class="text-on-surface-variant opacity-80 hover:text-secondary hover:opacity-100 transition-all underline-offset-4 hover:underline text-body-sm" href="https://github.com/daxrs/dax-rs">GitHub</a></li>
-        
-      </ul>
-    </div>
-    <div>
-      
-      </div>
-    <div>
-      <h4 class="font-label-caps text-label-caps text-on-surface mb-gutter">Stay Updated</h4>
-      <form method="post" action="https://lm.dax.rs/subscription/form" class="flex">
-          <input type="hidden" name="nonce" />
-          <input type="hidden" name="next" value="https://www.dax.rs" />
-          <input type="hidden" name="l" value="4512f57c-8340-45b0-9834-246fda450ed0" />
-
-          <label for="footer-email" class="sr-only">Email address</label>
-        <input id="footer-email" class="bg-surface-container-low border border-outline-variant border-r-0 text-body-sm rounded-l px-gutter w-full focus:ring-1 focus:ring-secondary focus:border-secondary" placeholder="Email" type="email" name="email"/>
-        <button type="submit" aria-label="Subscribe to newsletter" class="bg-surface-tint text-on-primary px-gutter rounded-r hover:opacity-90 transition-all">
-          <span aria-hidden="true" class="material-symbols-outlined">send</span>
-        </button>
-      </form>
-    </div>
-  </div>
-  <div class="px-margin-desktop max-w-[1280px] mx-auto mt-margin-desktop pt-gutter border-t border-outline-variant flex justify-between items-center">
-    <p class="font-body-sm text-body-sm text-on-surface-variant opacity-60">Built with <a href="https://gohugo.io" class="hover:text-secondary transition-colors">Hugo</a>.</p>
-    <div class="flex gap-4 items-center">
-      <span class="w-3 h-3 rounded-full bg-secondary-container/20 flex items-center justify-center">
-        <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-      </span>
-      <span class="font-label-caps text-[10px] text-on-surface-variant uppercase">All Systems Nominal</span>
-    </div>
-  </div>
-</footer>
-
-</main>
-
-
-<script>
-  document.querySelectorAll('.doc-content pre').forEach(pre => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'pre-wrapper';
-    pre.parentNode.insertBefore(wrapper, pre);
-    wrapper.appendChild(pre);
-    const btn = document.createElement('button');
-    btn.className = 'pre-copy-btn';
-    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px">content_copy</span> Copy';
-    btn.addEventListener('click', () => {
-      navigator.clipboard.writeText(pre.innerText).catch(() => {});
-      btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px">check</span> Copied';
-      btn.style.color = '#00dce5';
-      setTimeout(() => {
-        btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px">content_copy</span> Copy';
-        btn.style.color = '';
-      }, 2000);
-    });
-    wrapper.appendChild(btn);
-  });
-
-  const sections = document.querySelectorAll('.doc-content h2, .doc-content h3');
-  const tocLinks = document.querySelectorAll('.toc a');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        tocLinks.forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('href') === '#' + entry.target.id) link.classList.add('active');
-        });
-      }
-    });
-  }, { rootMargin: '0px 0px -60% 0px' });
-  sections.forEach(s => observer.observe(s));
-</script>
-
-</body>
-</html>
+</code></pre><p>Validates a DAX query against the model without executing it. Three phases run in order — a later phase only runs if the earlier one passes:</p><ol><li><strong>Syntax</strong> — the query must be parseable DAX (<code>EVALUATE ...</code>, optionally with a <code>DEFINE</code> block).</li><li><strong>Semantic</strong> — all column references (<code>Table[Column]</code>), table references, and function names must exist in the model.</li><li><strong>Type</strong> — argument types must satisfy each function&rsquo;s signature.</li></ol><p><strong>Path parameters</strong></p><table><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td>Model name</td></tr></tbody></table><p><strong>Request body</strong></p><p>Raw DAX query text, for example:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-dax data-lang=dax><span class=line><span class=cl>EVALUATE
+</span></span><span class=line><span class=cl><span class=nf>SUMMARIZECOLUMNS</span><span class=p>(</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=na>&#39;Product&#39;[Color]</span><span class=o>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=s>&#34;Revenue&#34;</span><span class=o>,</span><span class=w> </span><span class=na>[Total Sales]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>)</span><span class=w>
+</span></span></span></code></pre></div><p><strong>Response <code>200 OK</code> — valid query</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;valid&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;errors&#34;</span><span class=p>:</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p><strong>Response <code>200 OK</code> — invalid query</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;valid&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;errors&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&#34;kind&#34;</span><span class=p>:</span> <span class=s2>&#34;syntax&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&#34;message&#34;</span><span class=p>:</span> <span class=s2>&#34; --&gt; 1:9\n  |\n1 | EVALUTE ...\n  |         ^---\n  |\n  = expected ...&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&#34;kind&#34;</span><span class=p>:</span> <span class=s2>&#34;semantic&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&#34;message&#34;</span><span class=p>:</span> <span class=s2>&#34;Unknown column: Sales.Amountt&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>},</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&#34;kind&#34;</span><span class=p>:</span> <span class=s2>&#34;type&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>      <span class=nt>&#34;message&#34;</span><span class=p>:</span> <span class=s2>&#34;Type error: ...&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>The endpoint always returns <code>200 OK</code>. Errors are reported in the body, not via HTTP status codes. Multiple errors can be returned when more than one expression fails to bind.</p><p><strong>Error <code>kind</code> values</strong></p><table><thead><tr><th>Value</th><th>Meaning</th></tr></thead><tbody><tr><td><code>syntax</code></td><td>The query could not be parsed. Only one error is returned and later phases are skipped</td></tr><tr><td><code>semantic</code></td><td>An unknown column, table, function, or identifier. May appear multiple times</td></tr><tr><td><code>type</code></td><td>A function received arguments of incompatible types. May appear multiple times</td></tr></tbody></table><p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p><hr><h3 id=refresh-data>Refresh data</h3><pre tabindex=0><code>POST /models/{id}/refreshdata
+</code></pre><p>Reloads all Parquet data sources for the model into memory. Safe to call while queries are in-flight — new data is loaded into a temporary buffer first and swapped in atomically after all tables succeed. If any table fails to load, the existing in-memory data is left untouched and an error is returned.</p><p>Updates the <code>last_refreshed</code> timestamp on the model. Does <strong>not</strong> affect <code>last_schema_update</code>.</p><p><strong>Path parameters</strong></p><table><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td>Model name</td></tr></tbody></table><p><strong>Response <code>204 No Content</code></strong> — all tables reloaded successfully.</p><p><strong>Response <code>500 Internal Server Error</code></strong> — plain-text error message describing which table failed and why.</p><p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p><hr><h3 id=run-commands>Run commands</h3><pre tabindex=0><code>POST /models/{id}/commands
+</code></pre><p>Applies a list of schema-mutation commands to the model. Commands execute sequentially; on the first error, execution stops and the error is returned.</p><p><strong>Path parameters</strong></p><table><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>id</code></td><td>Model name</td></tr></tbody></table><p><strong>Request body</strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;dryRun&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;commands&#34;</span><span class=p>:</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;...&#34;</span><span class=p>,</span> <span class=err>...</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>Set <code>dryRun: true</code> to validate and simulate commands without persisting changes.</p><p><strong>Response <code>200 OK</code></strong></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;dryRun&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;applied&#34;</span><span class=p>:</span> <span class=mi>2</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;errors&#34;</span><span class=p>:</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p><code>applied</code> is the number of commands that succeeded before the first error (or the total if all succeeded). <code>errors</code> contains at most one entry (the first failure).</p><p><strong>Response <code>404 Not Found</code></strong> — model ID does not exist.</p><hr><h2 id=commands-reference>Commands reference</h2><p>All commands share a <code>"type"</code> discriminator field. Unrecognised types are rejected at parse time.</p><h3 id=model-commands>Model commands</h3><h4 id=renamemodel><code>RenameModel</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;RenameModel&#34;</span><span class=p>,</span> <span class=nt>&#34;newName&#34;</span><span class=p>:</span> <span class=s2>&#34;NewModelName&#34;</span> <span class=p>}</span>
+</span></span></code></pre></div><h4 id=setmodelproperty><code>SetModelProperty</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetModelProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;culture&#34;</span><span class=p>:</span> <span class=s2>&#34;fr-FR&#34;</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetModelProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;collation&#34;</span><span class=p>:</span> <span class=s2>&#34;Latin1_General_100_BIN2&#34;</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetModelProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;defaultMode&#34;</span><span class=p>:</span> <span class=s2>&#34;DirectQuery&#34;</span> <span class=p>}</span> <span class=p>}</span>
+</span></span></code></pre></div><p>The <code>property</code> field is an externally-tagged union — exactly one key naming the property, with its typed value.</p><hr><h3 id=table-commands>Table commands</h3><h4 id=createtable><code>CreateTable</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;CreateTable&#34;</span><span class=p>,</span> <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;NewTable&#34;</span> <span class=p>}</span>
+</span></span></code></pre></div><h4 id=deletetable><code>DeleteTable</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;DeleteTable&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span> <span class=p>}</span>
+</span></span></code></pre></div><h4 id=renametable><code>RenameTable</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;RenameTable&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;newName&#34;</span><span class=p>:</span> <span class=s2>&#34;Orders&#34;</span> <span class=p>}</span>
+</span></span></code></pre></div><h4 id=settableproperty><code>SetTableProperty</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetTableProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;isHidden&#34;</span><span class=p>:</span> <span class=kc>true</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetTableProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;description&#34;</span><span class=p>:</span> <span class=s2>&#34;Main fact table&#34;</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetTableProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;description&#34;</span><span class=p>:</span> <span class=kc>null</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetTableProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;dataCategory&#34;</span><span class=p>:</span> <span class=s2>&#34;Time&#34;</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetTableProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;dataCategory&#34;</span><span class=p>:</span> <span class=kc>null</span> <span class=p>}</span> <span class=p>}</span>
+</span></span></code></pre></div><p>Pass <code>null</code> for optional string/category properties to clear them.</p><hr><h3 id=column-commands>Column commands</h3><h4 id=addcolumn><code>AddColumn</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;AddColumn&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;dataType&#34;</span><span class=p>:</span> <span class=s2>&#34;double&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;isHidden&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;isNullable&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;isKey&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;isUnique&#34;</span><span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;summarizeBy&#34;</span><span class=p>:</span> <span class=s2>&#34;Sum&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;formatString&#34;</span><span class=p>:</span> <span class=s2>&#34;#,##0.00&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;displayFolder&#34;</span><span class=p>:</span> <span class=s2>&#34;Financials&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;description&#34;</span><span class=p>:</span> <span class=s2>&#34;Sale amount in base currency&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>Optional fields: <code>summarizeBy</code> (default <code>None</code>), <code>formatString</code>, <code>displayFolder</code>, <code>description</code>.</p><p><strong><code>dataType</code> values:</strong> <code>string</code>, <code>int64</code>, <code>double</code>, <code>decimal</code>, <code>dateTime</code>, <code>boolean</code>, <code>binary</code></p><h4 id=deletecolumn><code>DeleteColumn</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;DeleteColumn&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span> <span class=p>}</span>
+</span></span></code></pre></div><h4 id=renamecolumn><code>RenameColumn</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;RenameColumn&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amt&#34;</span><span class=p>,</span> <span class=nt>&#34;newName&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span> <span class=p>}</span>
+</span></span></code></pre></div><h4 id=changecolumntype><code>ChangeColumnType</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;ChangeColumnType&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span><span class=p>,</span> <span class=nt>&#34;dataType&#34;</span><span class=p>:</span> <span class=s2>&#34;double&#34;</span> <span class=p>}</span>
+</span></span></code></pre></div><h4 id=setcolumnproperty><code>SetColumnProperty</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetColumnProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;isHidden&#34;</span><span class=p>:</span> <span class=kc>true</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetColumnProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;description&#34;</span><span class=p>:</span> <span class=s2>&#34;Sale amount&#34;</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetColumnProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;description&#34;</span><span class=p>:</span> <span class=kc>null</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetColumnProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;formatString&#34;</span><span class=p>:</span> <span class=s2>&#34;#,##0.00&#34;</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetColumnProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;formatString&#34;</span><span class=p>:</span> <span class=kc>null</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetColumnProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;displayFolder&#34;</span><span class=p>:</span> <span class=s2>&#34;Financials&#34;</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetColumnProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;displayFolder&#34;</span><span class=p>:</span> <span class=kc>null</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetColumnProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;dataCategory&#34;</span><span class=p>:</span> <span class=s2>&#34;WebUrl&#34;</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetColumnProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;dataCategory&#34;</span><span class=p>:</span> <span class=kc>null</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetColumnProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;sortByColumn&#34;</span><span class=p>:</span> <span class=s2>&#34;SortKey&#34;</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetColumnProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;sortByColumn&#34;</span><span class=p>:</span> <span class=kc>null</span> <span class=p>}</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetColumnProperty&#34;</span><span class=p>,</span> <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;column&#34;</span><span class=p>:</span> <span class=s2>&#34;Amount&#34;</span><span class=p>,</span> <span class=nt>&#34;property&#34;</span><span class=p>:</span> <span class=p>{</span> <span class=nt>&#34;summarizeBy&#34;</span><span class=p>:</span> <span class=s2>&#34;Sum&#34;</span> <span class=p>}</span> <span class=p>}</span>
+</span></span></code></pre></div><p>Pass <code>null</code> for optional properties to clear them. <code>isHidden</code> and <code>summarizeBy</code> do not accept <code>null</code>.</p><p><strong><code>summarizeBy</code> values:</strong> <code>none</code>, <code>sum</code>, <code>min</code>, <code>max</code>, <code>count</code>, <code>average</code>, <code>distinctCount</code></p><p><strong><code>dataCategory</code> values:</strong> <code>Address</code>, <code>City</code>, <code>Continent</code>, <code>Country</code>, <code>County</code>, <code>Latitude</code>, <code>Longitude</code>, <code>Place</code>, <code>PostalCode</code>, <code>StateOrProvince</code>, <code>WebUrl</code>, <code>ImageUrl</code>, <code>Barcode</code>, <code>PhoneNumber</code>, <code>Organization</code>, <code>FaceUri</code>, or any custom string.</p><hr><h3 id=measure-commands>Measure commands</h3><h4 id=createmeasure><code>CreateMeasure</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;CreateMeasure&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;table&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Total Sales&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;expression&#34;</span><span class=p>:</span> <span class=s2>&#34;SUM(Sales[Amount])&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;formatString&#34;</span><span class=p>:</span> <span class=s2>&#34;#,##0.00&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;displayFolder&#34;</span><span class=p>:</span> <span class=s2>&#34;KPIs&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;description&#34;</span><span class=p>:</span> <span class=s2>&#34;Sum of all sale amounts&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;isHidden&#34;</span><span class=p>:</span> <span class=kc>false</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>Optional fields: <code>formatString</code>, <code>displayFolder</code>, <code>description</code>, <code>isHidden</code> (default <code>false</code>).</p><h4 id=deletemeasure><code>DeleteMeasure</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;DeleteMeasure&#34;</span><span class=p>,</span> <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Total Sales&#34;</span> <span class=p>}</span>
+</span></span></code></pre></div><h4 id=renamemeasure><code>RenameMeasure</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;RenameMeasure&#34;</span><span class=p>,</span> <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Total Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;newName&#34;</span><span class=p>:</span> <span class=s2>&#34;Revenue&#34;</span> <span class=p>}</span>
+</span></span></code></pre></div><h4 id=updatemeasureexpression><code>UpdateMeasureExpression</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;UpdateMeasureExpression&#34;</span><span class=p>,</span> <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Total Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;expression&#34;</span><span class=p>:</span> <span class=s2>&#34;SUMX(Sales, Sales[Amount])&#34;</span> <span class=p>}</span>
+</span></span></code></pre></div><h4 id=setmeasureformatstring><code>SetMeasureFormatString</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;SetMeasureFormatString&#34;</span><span class=p>,</span> <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Total Sales&#34;</span><span class=p>,</span> <span class=nt>&#34;formatString&#34;</span><span class=p>:</span> <span class=s2>&#34;#,##0.00&#34;</span> <span class=p>}</span>
+</span></span></code></pre></div><hr><h3 id=relationship-commands>Relationship commands</h3><h4 id=createrelationship><code>CreateRelationship</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;CreateRelationship&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales_Product&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;fromTable&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;fromColumn&#34;</span><span class=p>:</span> <span class=s2>&#34;ProductKey&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;toTable&#34;</span><span class=p>:</span> <span class=s2>&#34;Product&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;toColumn&#34;</span><span class=p>:</span> <span class=s2>&#34;ProductKey&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;isActive&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nt>&#34;bidirectional&#34;</span><span class=p>:</span> <span class=kc>false</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p><code>isActive</code> defaults to <code>true</code>, <code>bidirectional</code> defaults to <code>false</code>.</p><h4 id=deleterelationship><code>DeleteRelationship</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;DeleteRelationship&#34;</span><span class=p>,</span> <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales_Product&#34;</span> <span class=p>}</span>
+</span></span></code></pre></div><h4 id=updaterelationship><code>UpdateRelationship</code></h4><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;UpdateRelationship&#34;</span><span class=p>,</span> <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales_Product&#34;</span><span class=p>,</span> <span class=nt>&#34;isActive&#34;</span><span class=p>:</span> <span class=kc>false</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;UpdateRelationship&#34;</span><span class=p>,</span> <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales_Product&#34;</span><span class=p>,</span> <span class=nt>&#34;bidirectional&#34;</span><span class=p>:</span> <span class=kc>true</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>{</span> <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;UpdateRelationship&#34;</span><span class=p>,</span> <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Sales_Product&#34;</span><span class=p>,</span> <span class=nt>&#34;isActive&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span> <span class=nt>&#34;bidirectional&#34;</span><span class=p>:</span> <span class=kc>false</span> <span class=p>}</span>
+</span></span></code></pre></div><p>All fields except <code>name</code> are optional — omit to leave unchanged.</p></div><nav aria-label="Page navigation" class="mt-16 pt-8 border-t border-outline-variant flex justify-between gap-gutter"><a href=/docs/tmsl/ class="flex items-center gap-2 text-on-surface-variant hover:text-surface-tint transition-colors max-w-[45%]"><span aria-hidden=true class="material-symbols-outlined shrink-0">arrow_back</span><div><div class="font-label-caps text-label-caps uppercase opacity-60">Previous</div><div class="font-headline-md text-headline-md line-clamp-1">TMSL Model</div></div></a><a href=/docs/dax_functions/ class="flex items-center gap-2 text-right text-on-surface-variant hover:text-surface-tint transition-colors max-w-[45%] ml-auto"><div><div class="font-label-caps text-label-caps uppercase opacity-60">Next</div><div class="font-headline-md text-headline-md line-clamp-1">DAX functions</div></div><span aria-hidden=true class="material-symbols-outlined shrink-0">arrow_forward</span></a></nav></article><aside aria-label="Table of contents" class="hidden lg:block w-64 h-fit sticky top-24"><div class="border-l border-outline-variant pl-6"><p class="font-label-caps text-label-caps text-secondary-container mb-6 uppercase tracking-widest">On this page</p><div class=toc><nav id=TableOfContents><ul><li><a href=#endpoints>Endpoints</a><ul><li><a href=#list-models>List models</a></li><li><a href=#get-model>Get model</a></li><li><a href=#list-tables>List tables</a></li><li><a href=#get-table>Get table</a></li><li><a href=#list-relationships>List relationships</a></li><li><a href=#list-measures>List measures</a></li><li><a href=#get-object-dependencies>Get object dependencies</a></li><li><a href=#evaluate-dax>Evaluate DAX</a></li><li><a href=#validate-dax>Validate DAX</a></li><li><a href=#refresh-data>Refresh data</a></li><li><a href=#run-commands>Run commands</a></li></ul></li><li><a href=#commands-reference>Commands reference</a><ul><li><a href=#model-commands>Model commands</a></li><li><a href=#table-commands>Table commands</a></li><li><a href=#column-commands>Column commands</a></li><li><a href=#measure-commands>Measure commands</a></li><li><a href=#relationship-commands>Relationship commands</a></li></ul></li></ul></nav></div></div></aside></div><footer class="bg-surface-container-lowest w-full py-margin-desktop mt-auto border-t border-outline-variant"><div class="grid grid-cols-2 md:grid-cols-4 px-margin-desktop max-w-[1280px] mx-auto gap-margin-desktop"><div class="col-span-2 md:col-span-1"><span class="font-label-caps text-label-caps text-surface-tint block mb-gutter">dax.rs</span><p class="text-body-sm text-on-surface-variant opacity-80 leading-relaxed">© 2026 dax.rs contributors. Built with Rust.</p></div><div><h4 class="font-label-caps text-label-caps text-on-surface mb-gutter">Community</h4><ul class=space-y-unit><li><a class="text-on-surface-variant opacity-80 hover:text-secondary hover:opacity-100 transition-all underline-offset-4 hover:underline text-body-sm" href=https://github.com/daxrs/dax-rs>GitHub</a></li></ul></div><div></div><div><h4 class="font-label-caps text-label-caps text-on-surface mb-gutter">Stay Updated</h4><form method=post action=https://lm.dax.rs/subscription/form class=flex><input type=hidden name=nonce>
+<input type=hidden name=next value=https://www.dax.rs>
+<input type=hidden name=l value=4512f57c-8340-45b0-9834-246fda450ed0>
+<label for=footer-email class=sr-only>Email address</label>
+<input id=footer-email class="bg-surface-container-low border border-outline-variant border-r-0 text-body-sm rounded-l px-gutter w-full focus:ring-1 focus:ring-secondary focus:border-secondary" placeholder=Email type=email name=email>
+<button type=submit aria-label="Subscribe to newsletter" class="bg-surface-tint text-on-primary px-gutter rounded-r hover:opacity-90 transition-all">
+<span aria-hidden=true class=material-symbols-outlined>send</span></button></form></div></div><div class="px-margin-desktop max-w-[1280px] mx-auto mt-margin-desktop pt-gutter border-t border-outline-variant flex justify-between items-center"><p class="font-body-sm text-body-sm text-on-surface-variant opacity-60">Built with <a href=https://gohugo.io class="hover:text-secondary transition-colors">Hugo</a>.</p><div class="flex gap-4 items-center"><span class="w-3 h-3 rounded-full bg-secondary-container/20 flex items-center justify-center"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+</span><span class="font-label-caps text-[10px] text-on-surface-variant uppercase">All Systems Nominal</span></div></div></footer></main><script>document.querySelectorAll(".doc-content pre").forEach(e=>{const n=document.createElement("div");n.className="pre-wrapper",e.parentNode.insertBefore(n,e),n.appendChild(e);const t=document.createElement("button");t.className="pre-copy-btn",t.innerHTML='<span class="material-symbols-outlined" style="font-size:14px">content_copy</span> Copy',t.addEventListener("click",()=>{navigator.clipboard.writeText(e.innerText).catch(()=>{}),t.innerHTML='<span class="material-symbols-outlined" style="font-size:14px">check</span> Copied',t.style.color="#00dce5",setTimeout(()=>{t.innerHTML='<span class="material-symbols-outlined" style="font-size:14px">content_copy</span> Copy',t.style.color=""},2e3)}),n.appendChild(t)});const sections=document.querySelectorAll(".doc-content h2, .doc-content h3"),tocLinks=document.querySelectorAll(".toc a"),observer=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&tocLinks.forEach(t=>{t.classList.remove("active"),t.getAttribute("href")==="#"+e.target.id&&t.classList.add("active")})})},{rootMargin:"0px 0px -60% 0px"});sections.forEach(e=>observer.observe(e))</script></body></html>
