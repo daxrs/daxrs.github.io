@@ -2,42 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/docs/running/</loc>
+    <loc>https://www.dax.rs/docs/running/</loc>
   </url><url>
-    <loc>http://localhost:1313/docs/server_config/</loc>
+    <loc>https://www.dax.rs/docs/server_config/</loc>
   </url><url>
-    <loc>http://localhost:1313/docs/dax_functions/</loc>
+    <loc>https://www.dax.rs/docs/dax_functions/</loc>
   </url><url>
-    <loc>http://localhost:1313/docs/models_api/</loc>
+    <loc>https://www.dax.rs/docs/models_api/</loc>
   </url><url>
-    <loc>http://localhost:1313/docs/tmsl/</loc>
+    <loc>https://www.dax.rs/docs/tmsl/</loc>
   </url><url>
-    <loc>http://localhost:1313/tags/ai/</loc>
+    <loc>https://www.dax.rs/tags/ai/</loc>
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/blog/</loc>
+    <loc>https://www.dax.rs/blog/</loc>
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://www.dax.rs/</loc>
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/blog/launching-dax-rs/</loc>
+    <loc>https://www.dax.rs/blog/launching-dax-rs/</loc>
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/licensing/</loc>
+    <loc>https://www.dax.rs/tags/licensing/</loc>
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/open-source/</loc>
+    <loc>https://www.dax.rs/tags/open-source/</loc>
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/roadmap/</loc>
+    <loc>https://www.dax.rs/tags/roadmap/</loc>
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://www.dax.rs/tags/</loc>
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>https://www.dax.rs/categories/</loc>
   </url><url>
-    <loc>http://localhost:1313/docs/</loc>
+    <loc>https://www.dax.rs/docs/</loc>
   </url>
 </urlset>

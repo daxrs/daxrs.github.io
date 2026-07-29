@@ -2,38 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on dax.rs | High-Performance DAX/XMLA Server in Rust</title>
-    <link>http://localhost:1313/tags/</link>
+    <link>https://www.dax.rs/tags/</link>
     <description>Recent content in Tags on dax.rs | High-Performance DAX/XMLA Server in Rust</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 29 Jul 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://www.dax.rs/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>AI</title>
-      <link>http://localhost:1313/tags/ai/</link>
+      <link>https://www.dax.rs/tags/ai/</link>
       <pubDate>Wed, 29 Jul 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/ai/</guid>
+      <guid>https://www.dax.rs/tags/ai/</guid>
       <description></description>
     </item>
     <item>
       <title>Licensing</title>
-      <link>http://localhost:1313/tags/licensing/</link>
+      <link>https://www.dax.rs/tags/licensing/</link>
       <pubDate>Wed, 29 Jul 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/licensing/</guid>
+      <guid>https://www.dax.rs/tags/licensing/</guid>
       <description></description>
     </item>
     <item>
       <title>Open Source</title>
-      <link>http://localhost:1313/tags/open-source/</link>
+      <link>https://www.dax.rs/tags/open-source/</link>
       <pubDate>Wed, 29 Jul 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/open-source/</guid>
+      <guid>https://www.dax.rs/tags/open-source/</guid>
       <description></description>
     </item>
     <item>
       <title>Roadmap</title>
-      <link>http://localhost:1313/tags/roadmap/</link>
+      <link>https://www.dax.rs/tags/roadmap/</link>
       <pubDate>Wed, 29 Jul 2026 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/tags/roadmap/</guid>
+      <guid>https://www.dax.rs/tags/roadmap/</guid>
       <description></description>
     </item>
   </channel>
