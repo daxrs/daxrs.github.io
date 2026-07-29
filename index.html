@@ -1,499 +1,487 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html class="dark" lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <title>DAX.RS | The Future of Data Analysis Expressions</title>
-        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-        <link
-            href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap"
-            rel="stylesheet"
-        />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-            rel="stylesheet"
-        />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-            rel="stylesheet"
-        />
-        <script id="tailwind-config">
-            tailwind.config = {
-                darkMode: "class",
-                theme: {
-                    extend: {
-                        colors: {
-                            "tertiary-fixed-dim": "#c4c6ce",
-                            "on-secondary-fixed-variant": "#004f54",
-                            "tertiary-container": "#dbdde5",
-                            "surface-variant": "#333538",
-                            error: "#ffb4ab",
-                            "surface-dim": "#111317",
-                            "surface-container-lowest": "#0c0e11",
-                            "on-surface-variant": "#b9caca",
-                            "on-tertiary-container": "#5e6168",
-                            "on-primary-fixed-variant": "#004f53",
-                            "on-tertiary": "#2d3037",
-                            "on-secondary-container": "#002f33",
-                            "surface-tint": "#00dce5",
-                            "on-primary-fixed": "#002021",
-                            "on-surface": "#e2e2e6",
-                            "surface-container-highest": "#333538",
-                            "on-tertiary-fixed": "#191c22",
-                            secondary: "#6fd6df",
-                            "inverse-primary": "#00696e",
-                            "secondary-fixed": "#8df2fc",
-                            "surface-container-low": "#1a1c1f",
-                            "primary-fixed-dim": "#00dce5",
-                            "inverse-on-surface": "#2f3034",
-                            "surface-container-high": "#282a2d",
-                            primary: "#e9feff",
-                            "surface-bright": "#37393d",
-                            "error-container": "#93000a",
-                            "inverse-surface": "#e2e2e6",
-                            "on-error": "#690005",
-                            "primary-container": "#00f5ff",
-                            "on-background": "#e2e2e6",
-                            "secondary-fixed-dim": "#6fd6df",
-                            "surface-container": "#1e2023",
-                            "on-error-container": "#ffdad6",
-                            tertiary: "#faf9ff",
-                            "outline-variant": "#3a494a",
-                            "tertiary-fixed": "#e1e2ea",
-                            "on-primary-container": "#006c71",
-                            outline: "#849495",
-                            "on-primary": "#003739",
-                            background: "#111317",
-                            "primary-fixed": "#63f7ff",
-                            "on-secondary-fixed": "#002022",
-                            surface: "#111317",
-                            "secondary-container": "#2e9fa8",
-                            "on-tertiary-fixed-variant": "#44474d",
-                            "on-secondary": "#00363a",
-                        },
-                        borderRadius: {
-                            DEFAULT: "0.25rem",
-                            lg: "0.5rem",
-                            xl: "0.75rem",
-                            full: "9999px",
-                        },
-                        spacing: {
-                            gutter: "16px",
-                            "margin-mobile": "16px",
-                            unit: "4px",
-                            "margin-desktop": "32px",
-                            "container-max": "1440px",
-                        },
-                        fontFamily: {
-                            "mono-data": ["monospace"],
-                            "headline-lg": ["Hanken Grotesk"],
-                            "body-lg": ["Hanken Grotesk"],
-                            "label-caps": ["Hanken Grotesk"],
-                            "headline-lg-mobile": ["Hanken Grotesk"],
-                            "body-sm": ["Hanken Grotesk"],
-                            "headline-md": ["Hanken Grotesk"],
-                        },
-                        fontSize: {
-                            "mono-data": [
-                                "13px",
-                                { lineHeight: "1.0", fontWeight: "500" },
-                            ],
-                            "headline-lg": [
-                                "32px",
-                                {
-                                    lineHeight: "1.2",
-                                    letterSpacing: "-0.02em",
-                                    fontWeight: "700",
-                                },
-                            ],
-                            "body-lg": [
-                                "16px",
-                                { lineHeight: "1.5", fontWeight: "400" },
-                            ],
-                            "label-caps": [
-                                "12px",
-                                {
-                                    lineHeight: "1.0",
-                                    letterSpacing: "0.1em",
-                                    fontWeight: "700",
-                                },
-                            ],
-                            "headline-lg-mobile": [
-                                "24px",
-                                {
-                                    lineHeight: "1.2",
-                                    letterSpacing: "-0.01em",
-                                    fontWeight: "700",
-                                },
-                            ],
-                            "body-sm": [
-                                "14px",
-                                { lineHeight: "1.5", fontWeight: "400" },
-                            ],
-                            "headline-md": [
-                                "20px",
-                                { lineHeight: "1.3", fontWeight: "600" },
-                            ],
-                        },
-                    },
-                },
-            };
-        </script>
-        <style>
-            body {
-                background-color: #111317;
-                color: #e2e2e6;
-                -webkit-font-smoothing: antialiased;
-            }
-            .grid-pattern {
-                background-image:
-                    linear-gradient(#1e2023 1px, transparent 1px),
-                    linear-gradient(90deg, #1e2023 1px, transparent 1px);
-                background-size: 40px 40px;
-            }
-            .scanline {
-                width: 100%;
-                height: 2px;
-                background: rgba(0, 245, 255, 0.1);
-                position: absolute;
-                animation: scan 8s linear infinite;
-            }
-            @keyframes scan {
-                0% {
-                    top: 0;
-                }
-                100% {
-                    top: 100%;
-                }
-            }
-            .glow-cyan {
-                box-shadow: 0 0 15px rgba(0, 245, 255, 0.3);
-            }
-            .border-glow {
-                border: 1px solid #3a494a;
-                transition: border-color 0.3s ease;
-            }
-            .border-glow:focus-within {
-                border-color: #00f5ff;
-                box-shadow: 0 0 10px rgba(0, 245, 255, 0.2);
-            }
-        </style>
-        <script
-            async
-            src="https://pl.dax.rs/js/pa-N4WRzGRFdsnTQvX8dywO9.js"
-        ></script>
-        <script>
-            ((window.plausible =
-                window.plausible ||
-                function () {
-                    (plausible.q = plausible.q || []).push(arguments);
-                }),
-                (plausible.init =
-                    plausible.init ||
-                    function (i) {
-                        plausible.o = i || {};
-                    }));
-            plausible.init();
-        </script>
-    </head>
-    <body
-        class="font-body-lg text-body-lg overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container"
-    >
-        <!-- Subtle Technical Background -->
-        <div class="fixed inset-0 grid-pattern pointer-events-none z-0"></div>
-        <div
-            class="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-surface-container-lowest opacity-80 pointer-events-none z-0"
-        ></div>
-        <div class="scanline z-0"></div>
-        <!-- TopNavBar Shell -->
-        <header
-            class="w-full top-0 border-b border-outline-variant bg-surface sticky z-50"
-        >
-            <div
-                class="flex justify-between items-center h-16 px-gutter max-w-container-max mx-auto"
-            >
-                <div
-                    class="font-headline-md text-headline-md font-bold text-secondary tracking-tighter"
-                >
-                    DAX.RS
-                </div>
-                <div class="flex items-center gap-6">
-                    <!--<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-secondary transition-colors scale-95 active:duration-75" href="#">
-                    MANIFESTO
-                </a>
-<button class="bg-primary-container text-on-primary-container font-label-caps text-label-caps px-4 py-2 hover:opacity-90 transition-opacity active:scale-95">
-                    NOTIFY_ME
-                </button>-->
-                </div>
-            </div>
-        </header>
-        <main
-            class="relative z-10 min-h-[calc(100vh-128px)] flex flex-col items-center justify-center px-gutter py-20"
-        >
-            <!-- Hero Section -->
-            <section class="max-w-4xl w-full text-center mb-16">
-                <div
-                    class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container-high border border-outline-variant mb-8"
-                >
-                    <span
-                        class="w-2 h-2 rounded-full bg-primary-container animate-pulse"
-                    ></span>
-                    <span
-                        class="font-mono-data text-mono-data text-primary-fixed-dim"
-                        >SYSTEM STATUS: ENGINE_CONSTRUCTION_IN_PROGRESS</span
-                    >
-                </div>
-                <h1
-                    class="font-headline-lg text-headline-lg md:text-[64px] leading-tight mb-6 text-primary tracking-tight"
-                >
-                    The Future of DAX is Coming.
-                </h1>
-                <p
-                    class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-12"
-                >
-                    We're building the first open-source, Rust-native DAX engine
-                    for modern data stacks. High performance, zero-copy
-                    architecture, and full XMLA compatibility.
-                </p>
-                <!-- Signup Form -->
-                <!--<div class="max-w-md mx-auto">
-                    <form
-                        class="flex flex-col md:flex-row gap-0 border-glow bg-surface-container-low p-1 group"
-                    >
-                        <input
-                            class="bg-transparent border-none focus:ring-0 text-primary font-mono-data px-4 py-3 flex-grow placeholder:text-outline"
-                            placeholder="ENTER_EMAIL_ADDRESS"
-                            required=""
-                            type="email"
-                        />
-                        <button
-                            class="bg-primary-container text-on-primary-container font-label-caps text-label-caps px-8 py-3 hover:bg-secondary-container transition-all active:scale-[0.98]"
-                            type="submit"
-                        >
-                            NOTIFY me when we launch.
-                        </button>
-                    </form>
-                    <p
-                        class="font-mono-data text-[10px] text-outline mt-3 text-left"
-                    >
-                        &gt;&gt; ENCRYPTED_SUBMISSION_READY
-                    </p>
-                </div>-->
-            </section>
-            <!-- Technical Specs / Bento Grid Lite -->
-            <section
-                class="max-w-container-max w-full grid grid-cols-1 md:grid-cols-3 gap-6 mb-20"
-            >
-                <!-- Spec Card 1 -->
-                <div
-                    class="bg-surface-container border border-outline-variant p-6 relative overflow-hidden group"
-                >
-                    <div
-                        class="absolute top-0 left-0 w-1 h-full bg-secondary-container"
-                    ></div>
-                    <div
-                        class="font-label-caps text-label-caps text-secondary mb-4"
-                    >
-                        01 // PERFORMANCE
-                    </div>
-                    <h3
-                        class="font-headline-md text-headline-md text-primary mb-3"
-                    >
-                        Rust-Native Speed
-                    </h3>
-                    <p class="text-body-sm text-on-surface-variant">
-                        Engineered for sub-millisecond query latency using
-                        memory-safe, high-concurrency Rust architecture.
-                    </p>
-                    <div class="mt-6 flex items-center gap-2">
-                        <div class="h-[1px] flex-grow bg-outline-variant"></div>
-                        <span class="font-mono-data text-mono-data text-outline"
-                            >X86_64 / ARM64</span
-                        >
-                    </div>
-                </div>
-                <!-- Spec Card 2 -->
-                <div
-                    class="bg-surface-container border border-outline-variant p-6 relative overflow-hidden group"
-                >
-                    <div
-                        class="absolute top-0 left-0 w-1 h-full bg-secondary-container"
-                    ></div>
-                    <div
-                        class="font-label-caps text-label-caps text-secondary mb-4"
-                    >
-                        02 // ARCHITECTURE
-                    </div>
-                    <h3
-                        class="font-headline-md text-headline-md text-primary mb-3"
-                    >
-                        Zero-Copy Memory
-                    </h3>
-                    <p class="text-body-sm text-on-surface-variant">
-                        Direct interaction with Apache Arrow buffers. No
-                        serialization overhead between your stack and our
-                        engine.
-                    </p>
-                    <div class="mt-6 flex items-center gap-2">
-                        <div class="h-[1px] flex-grow bg-outline-variant"></div>
-                        <span class="font-mono-data text-mono-data text-outline"
-                            >ARROW_V14</span
-                        >
-                    </div>
-                </div>
-                <!-- Spec Card 3 -->
-                <div
-                    class="bg-surface-container border border-outline-variant p-6 relative overflow-hidden group"
-                >
-                    <div
-                        class="absolute top-0 left-0 w-1 h-full bg-secondary-container"
-                    ></div>
-                    <div
-                        class="font-label-caps text-label-caps text-secondary mb-4"
-                    >
-                        03 // INTEROP
-                    </div>
-                    <h3
-                        class="font-headline-md text-headline-md text-primary mb-3"
-                    >
-                        XMLA Compliant
-                    </h3>
-                    <p class="text-body-sm text-on-surface-variant">
-                        Drop-in replacement for legacy engines. Connect your
-                        existing BI tools via standard protocols without
-                        friction.
-                    </p>
-                    <div class="mt-6 flex items-center gap-2">
-                        <div class="h-[1px] flex-grow bg-outline-variant"></div>
-                        <span class="font-mono-data text-mono-data text-outline"
-                            >PROTOCOL_V4.2</span
-                        >
-                    </div>
-                </div>
-            </section>
-            <!-- Terminal Progress Section -->
-            <section
-                class="w-full max-w-2xl bg-surface-container-lowest border border-outline-variant rounded-sm overflow-hidden"
-            >
-                <div
-                    class="bg-surface-variant px-4 py-2 flex items-center justify-between border-b border-outline-variant"
-                >
-                    <div class="flex gap-1.5">
-                        <div class="w-2.5 h-2.5 rounded-full bg-error/40"></div>
-                        <div
-                            class="w-2.5 h-2.5 rounded-full bg-secondary/40"
-                        ></div>
-                        <div
-                            class="w-2.5 h-2.5 rounded-full bg-primary-container/40"
-                        ></div>
-                    </div>
-                    <div class="font-mono-data text-[11px] text-outline">
-                        DEPLOY_PIPELINE.SH
-                    </div>
-                </div>
-                <div class="p-6 font-mono-data text-sm space-y-2">
-                    <div class="flex gap-4">
-                        <span class="text-outline">01</span>
-                        <span class="text-primary-fixed-dim"
-                            >Initializing kernel modules...</span
-                        >
-                        <span class="text-secondary ml-auto">DONE</span>
-                    </div>
-                    <div class="flex gap-4">
-                        <span class="text-outline">02</span>
-                        <span class="text-primary-fixed-dim"
-                            >Allocating heap space (8.0GB)...</span
-                        >
-                        <span class="text-secondary ml-auto">DONE</span>
-                    </div>
-                    <div class="flex gap-4">
-                        <span class="text-outline">03</span>
-                        <span class="text-primary-fixed-dim"
-                            >Compiling DAX syntax tree...</span
-                        >
-                        <span class="text-secondary ml-auto">DONE</span>
-                    </div>
-                    <div class="flex gap-4 items-center">
-                        <span class="text-outline">04</span>
-                        <span class="text-primary-container"
-                            >Building community assets...</span
-                        >
-                        <span class="animate-pulse ml-auto">_</span>
-                    </div>
-                    <div class="pt-6">
-                        <div
-                            class="flex justify-between font-label-caps text-label-caps mb-2 text-on-surface-variant"
-                        >
-                            <span>ESTIMATED_READY_STATE</span>
-                            <span>78%</span>
-                        </div>
-                        <div class="w-full h-1 bg-surface-container-highest">
-                            <div
-                                class="h-full bg-primary-container glow-cyan"
-                                style="width: 78%"
-                            ></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-        <!-- Footer Shell -->
-        <footer
-            class="w-full bottom-0 border-t border-outline-variant bg-surface-dim"
-        >
-            <div
-                class="flex flex-col md:flex-row justify-between items-center py-8 px-gutter max-w-container-max mx-auto gap-4"
-            >
-                <div
-                    class="font-label-caps text-label-caps text-on-surface-variant"
-                >
-                    © 2026 DAX.RS ENGINE. ALL RIGHTS RESERVED.
-                </div>
-                <div class="flex gap-8">
-                    <a
-                        class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-opacity opacity-80 hover:opacity-100 plausible-event-name=github+visit"
-                        href="https://github.com/daxrs"
-                        >GITHUB</a
-                    >
-                </div>
-            </div>
-        </footer>
-        <script>
-            // Micro-interaction for terminal progress simulation
-            const progressPercentage = document.querySelector(
-                ".pt-6 span:last-child",
-            );
-            const progressBar = document.querySelector(
-                ".bg-primary-container.glow-cyan",
-            );
-            let currentProgress = 78;
+<head>
+	<meta name="generator" content="Hugo 0.147.8"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>dax.rs | High-Performance DAX/XMLA Server in Rust</title>
+<meta name="description" content="An open-source XMLA server and DAX evaluator implemented in 100% safe Rust. Connect Excel or Power BI directly to your data with zero-copy overhead."/>
 
-            setInterval(() => {
-                if (currentProgress < 99) {
-                    if (Math.random() > 0.8) {
-                        currentProgress += 0.01;
-                        progressPercentage.innerText =
-                            Math.floor(currentProgress) + "%";
-                        progressBar.style.width = currentProgress + "%";
-                    }
-                }
-            }, 1000);
+<link rel="canonical" href="http://localhost:1313/"/>
+<link rel="alternate" type="application/rss+xml" title="dax.rs Blog" href="http://localhost:1313/blog/index.xml"/>
 
-            // Hover effect for spec cards
-            document
-                .querySelectorAll(".bg-surface-container")
-                .forEach((card) => {
-                    card.addEventListener("mousemove", (e) => {
-                        const rect = card.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        card.style.backgroundImage = `radial-gradient(circle at ${x}px ${y}px, rgba(0, 245, 255, 0.05) 0%, transparent 70%)`;
-                    });
-                    card.addEventListener("mouseleave", () => {
-                        card.style.backgroundImage = "none";
-                    });
-                });
-        </script>
-    </body>
+<meta property="og:site_name" content="dax.rs"/>
+<meta property="og:title" content="dax.rs | High-Performance DAX/XMLA Server in Rust"/>
+<meta property="og:description" content="An open-source XMLA server and DAX evaluator implemented in 100% safe Rust. Connect Excel or Power BI directly to your data with zero-copy overhead."/>
+<meta property="og:url" content="http://localhost:1313/"/>
+<meta property="og:type" content="website"/>
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="dax.rs | High-Performance DAX/XMLA Server in Rust"/>
+<meta name="twitter:description" content="An open-source XMLA server and DAX evaluator implemented in 100% safe Rust. Connect Excel or Power BI directly to your data with zero-copy overhead."/>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "error-container": "#93000a",
+          "on-primary": "#003739",
+          "primary-container": "#00f5ff",
+          "secondary": "#6fd6df",
+          "on-background": "#e2e2e6",
+          "on-tertiary-fixed-variant": "#44474d",
+          "primary": "#e9feff",
+          "secondary-container": "#2e9fa8",
+          "primary-fixed": "#63f7ff",
+          "on-surface-variant": "#b9caca",
+          "tertiary": "#faf9ff",
+          "on-secondary-fixed-variant": "#004f54",
+          "on-surface": "#e2e2e6",
+          "on-tertiary-fixed": "#191c22",
+          "outline-variant": "#3a494a",
+          "on-secondary-container": "#002f33",
+          "surface-container-low": "#1a1c1f",
+          "surface-container-highest": "#333538",
+          "on-primary-fixed": "#002021",
+          "on-secondary": "#00363a",
+          "tertiary-fixed": "#e1e2ea",
+          "inverse-surface": "#e2e2e6",
+          "outline": "#849495",
+          "inverse-on-surface": "#2f3034",
+          "secondary-fixed": "#8df2fc",
+          "on-primary-fixed-variant": "#004f53",
+          "surface-dim": "#111317",
+          "on-primary-container": "#006c71",
+          "surface-container-lowest": "#0c0e11",
+          "primary-fixed-dim": "#00dce5",
+          "inverse-primary": "#00696e",
+          "on-secondary-fixed": "#002022",
+          "on-error-container": "#ffdad6",
+          "secondary-fixed-dim": "#6fd6df",
+          "surface": "#111317",
+          "tertiary-container": "#dbdde5",
+          "surface-variant": "#333538",
+          "surface-container-high": "#282a2d",
+          "surface-bright": "#37393d",
+          "tertiary-fixed-dim": "#c4c6ce",
+          "surface-container": "#1e2023",
+          "error": "#ffb4ab",
+          "on-tertiary-container": "#5e6168",
+          "on-error": "#690005",
+          "on-tertiary": "#2d3037",
+          "surface-tint": "#00dce5",
+          "background": "#111317"
+        },
+        borderRadius: {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        spacing: {
+          "gutter": "16px",
+          "unit": "4px",
+          "container-max": "1440px",
+          "margin-desktop": "32px",
+          "margin-mobile": "16px"
+        },
+        fontFamily: {
+          "label-caps": ["Hanken Grotesk", "sans-serif"],
+          "headline-lg": ["Hanken Grotesk", "sans-serif"],
+          "body-lg": ["Hanken Grotesk", "sans-serif"],
+          "body-md": ["Hanken Grotesk", "sans-serif"],
+          "headline-md": ["Hanken Grotesk", "sans-serif"],
+          "headline-xl": ["Hanken Grotesk", "sans-serif"],
+          "mono-data": ["monospace"],
+          "body-sm": ["Hanken Grotesk", "sans-serif"],
+          "headline-lg-mobile": ["Hanken Grotesk", "sans-serif"],
+          "code-block": ["JetBrains Mono", "monospace"],
+          "status-indicator": ["JetBrains Mono", "monospace"]
+        },
+        fontSize: {
+          "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
+          "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+          "body-lg": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+          "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+          "headline-md": ["20px", {"lineHeight": "1.3", "fontWeight": "600"}],
+          "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+          "mono-data": ["13px", {"lineHeight": "1.0", "fontWeight": "500"}],
+          "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+          "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+          "code-block": ["13px", {"lineHeight": "1.5", "fontWeight": "400"}],
+          "status-indicator": ["11px", {"lineHeight": "1.0", "fontWeight": "700"}]
+        }
+      }
+    }
+  }
+</script>
+<link rel="stylesheet" href="/css/main.css"/>
+<script
+    async
+    src="https://pl.dax.rs/js/pa-N4WRzGRFdsnTQvX8dywO9.js"
+></script>
+<script>
+    ((window.plausible =
+        window.plausible ||
+        function () {
+            (plausible.q = plausible.q || []).push(arguments);
+        }),
+        (plausible.init =
+            plausible.init ||
+            function (i) {
+                plausible.o = i || {};
+            }));
+    plausible.init();
+</script>
+
+</head>
+
+<body class="font-body-lg text-body-lg overflow-x-hidden selection:bg-surface-tint selection:text-on-primary">
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="bg-surface w-full sticky top-0 z-50 border-b border-outline-variant transition-all duration-200 ease-in-out">
+  <nav aria-label="Main navigation" class="flex justify-between items-center px-margin-desktop py-gutter max-w-[1280px] mx-auto">
+    <div class="flex items-center gap-gutter">
+      <a href="/" class="font-headline-lg text-headline-lg font-bold text-surface-tint tracking-tighter">dax.rs</a>
+      <div class="hidden md:flex gap-gutter items-center ml-margin-desktop">
+        
+        
+        <a class="font-body-lg text-body-lg transition-colors text-on-surface-variant hover:text-on-surface" href="/docs/">Docs</a>
+        
+        
+        <a class="font-body-lg text-body-lg transition-colors text-on-surface-variant hover:text-on-surface" href="/blog/">Blog</a>
+        
+      </div>
+    </div>
+    <div class="flex items-center gap-gutter">
+      <span class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container-highest px-gutter py-1 rounded">v0.2.3</span>
+      <button aria-label="Open terminal" class="material-symbols-outlined text-surface-tint hover:text-primary-fixed-dim transition-all">terminal</button>
+    </div>
+  </nav>
+</header>
+
+<main id="main-content" class="relative">
+
+  
+  <section class="relative pt-margin-desktop pb-margin-desktop px-margin-desktop max-w-[1280px] mx-auto grid-bg">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-margin-desktop items-center">
+      <div class="lg:col-span-7 space-y-gutter">
+        <div class="inline-flex items-center gap-unit px-gutter py-1 border border-surface-tint/30 rounded-full bg-surface-tint/5">
+          <span class="w-2 h-2 rounded-full bg-surface-tint animate-pulse-dot"></span>
+          <span class="font-label-caps text-[11px] text-surface-tint uppercase tracking-widest">Engine Status: v0.2.3 Alpha</span>
+        </div>
+        <h1 class="font-headline-lg text-[48px] leading-tight text-on-surface max-w-2xl">
+          Universal <span class="text-surface-tint">DAX Engine</span> Built for Modern Systems.
+        </h1>
+        <p class="text-on-surface-variant max-w-xl">
+          An open-source XMLA server and DAX evaluator implemented in 100% safe Rust. Connect Excel or Power BI directly to your data with zero-copy overhead.
+        </p>
+        <div class="flex flex-wrap gap-gutter pt-unit">
+          <a href="/docs/installation/" class="bg-surface-tint text-on-primary px-margin-desktop py-gutter font-bold rounded hover:opacity-90 transition-all flex items-center gap-unit">
+            Get Started <span aria-hidden="true" class="material-symbols-outlined">arrow_forward</span>
+          </a>
+          <a href="/docs/" class="border border-secondary text-secondary px-margin-desktop py-gutter font-bold rounded hover:bg-secondary/10 transition-all glow-hover flex items-center gap-unit">
+            Read the Docs <span aria-hidden="true" class="material-symbols-outlined">description</span>
+          </a>
+        </div>
+      </div>
+      <div class="lg:col-span-5">
+        <div class="bg-surface-container-lowest border border-surface-container-highest rounded-lg overflow-hidden shadow-2xl">
+          <div class="bg-surface-container-high px-gutter py-unit flex justify-between items-center border-b border-outline-variant">
+            <div class="flex gap-unit">
+              <div class="terminal-dot bg-error"></div>
+              <div class="terminal-dot bg-surface-tint"></div>
+              <div class="terminal-dot bg-secondary"></div>
+            </div>
+            <div class="flex gap-gutter">
+              <span class="font-label-caps text-label-caps text-on-surface-variant opacity-60">bash — 80x24</span>
+              <button id="copy-btn" class="material-symbols-outlined text-on-surface-variant text-[16px] hover:text-on-surface">content_copy</button>
+            </div>
+          </div>
+          <div class="p-gutter font-code-block text-code-block min-h-[220px] overflow-x-auto whitespace-nowrap">
+            <div class="flex gap-unit mb-unit">
+              <span class="text-secondary">$</span>
+              <span class="text-on-surface" id="terminal-cmd">docker pull ghcr.io/daxrs/dax-rs:latest</span>
+            </div>
+            <div class="text-on-surface-variant/60">
+              <div>latest: Pulling from daxrs/dax-rs</div>
+              <div>Status: Image is up to date for ghcr.io/daxrs/dax-rs:latest</div>
+              <div class="mt-gutter"><span class="text-secondary">$</span>
+              <span class="text-on-surface" id="terminal-cmd">docker run --rm -p 3000:3000 -e DEMO_DATA_SEED=42 \<br>&nbsp;&nbsp;ghcr.io/daxrs/dax-rs:latest</span></div>
+              <div>DEMO_DATA_SEED=42 — generating demo data...</div>
+              <div>Generating DimDate...</div>
+              <div class="pl-gutter">wrote DimDate.parquet (731 rows)</div>
+              <div>[...]</div>
+              <div>Generating FactSales (this may take a moment)...</div>
+              <div class="pl-gutter">wrote FactSales.parquet (1479240 rows)</div>
+              <div class="mt-gutter text-secondary">Done. Total FactSales rows: 1479240</div>
+              <div><span class="text-secondary">INFO</span> dax_rs: model loaded model=SportRetailer tables=10 measures=8</div>
+              <div><span class="text-secondary">INFO</span> dax_rs: model loaded model=SportRetailerTables tables=10 measures=8</div>
+              <div><span class="text-secondary">INFO</span> dax_rs::server: XMLA server running on http://localhost:3000/xmla</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section class="bg-surface-container-low py-margin-desktop px-margin-desktop border-y border-outline-variant">
+    <div class="max-w-[1280px] mx-auto">
+      <div class="text-center mb-margin-desktop">
+        <h2 class="font-headline-lg text-headline-lg text-on-surface mb-unit">Architectural Precision</h2>
+        <p class="text-on-surface-variant">Designed for minimal latency and maximum throughput.</p>
+      </div>
+      
+<div class="flex flex-col lg:flex-row items-center justify-between gap-gutter relative">
+  <div class="hidden lg:block absolute top-1/2 left-0 w-full h-[1px] bg-outline-variant -z-10"></div>
+  
+    
+    <div class="bg-surface-container-highest border border-outline-variant p-gutter rounded-lg w-full max-w-[200px] text-center">
+      <span class="material-symbols-outlined text-surface-tint mb-unit" style="font-size: 32px;">desktop_windows</span>
+      <div class="font-label-caps text-label-caps text-surface-tint">Client</div>
+      <div class="text-on-surface text-body-sm">Excel / Power BI</div>
+    </div>
+    
+    
+    <span class="material-symbols-outlined text-on-surface-variant">arrow_forward</span>
+    
+  
+    
+    <div class="bg-surface-container-highest border border-outline-variant p-gutter rounded-lg w-full max-w-[200px] text-center">
+      <span class="material-symbols-outlined text-secondary mb-unit" style="font-size: 32px;">swap_calls</span>
+      <div class="font-label-caps text-label-caps text-secondary">XMLA / SOAP</div>
+      <div class="text-on-surface text-body-sm">Transport Layer</div>
+    </div>
+    
+    
+    <span class="material-symbols-outlined text-on-surface-variant">arrow_forward</span>
+    
+  
+    
+    <div class="bg-surface-tint text-on-primary p-gutter rounded-xl w-full max-w-[240px] text-center ring-4 ring-surface-tint/20 shadow-xl">
+      <span class="material-symbols-outlined mb-unit" style="font-size: 40px;">settings_input_component</span>
+      <div class="font-headline-lg-mobile text-headline-lg-mobile font-bold">dax.rs</div>
+      <div class="text-on-primary/80 text-body-sm">DAX Engine</div>
+    </div>
+    
+    
+    <span class="material-symbols-outlined text-on-surface-variant">arrow_forward</span>
+    
+  
+    
+    <div class="bg-surface-container-highest border border-outline-variant p-gutter rounded-lg w-full max-w-[200px] text-center">
+      <span class="material-symbols-outlined text-secondary-fixed-dim mb-unit" style="font-size: 32px;">bolt</span>
+      <div class="font-label-caps text-label-caps text-secondary-fixed-dim">Polars / Arrow</div>
+      <div class="text-on-surface text-body-sm">Compute Backend</div>
+    </div>
+    
+    
+    <span class="material-symbols-outlined text-on-surface-variant">arrow_forward</span>
+    
+  
+    
+    <div class="bg-surface-container-highest border border-outline-variant p-gutter rounded-lg w-full max-w-[200px] text-center">
+      <span class="material-symbols-outlined text-secondary mb-unit" style="font-size: 32px;">database</span>
+      <div class="font-label-caps text-label-caps text-secondary">Data</div>
+      <div class="text-on-surface text-body-sm">Parquet</div>
+    </div>
+    
+    
+  
+</div>
+
+    </div>
+  </section>
+
+  
+  
+  <section class="py-margin-desktop px-margin-desktop max-w-[1280px] mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-margin-desktop">
+      <div class="space-y-gutter">
+        <h2 class="font-headline-lg text-headline-lg text-on-surface">Sovereign Analytics</h2>
+        <p class="text-on-surface-variant">Most DAX engines are tightly coupled to proprietary BI systems.
+dax.rs is an attempt to build an open, embeddable, high-performance implementation of DAX and XMLA infrastructure using Rust.</p>
+        <div class="space-y-gutter">
+          
+          <div class="flex gap-gutter items-start p-gutter bg-surface-container rounded-lg border border-outline-variant hover:border-surface-tint transition-colors cursor-default">
+            <span class="material-symbols-outlined text-surface-tint">devices</span>
+            <div>
+              <h3 class="font-bold text-on-surface">Infrastructure-friendly</h3>
+              <p class="text-body-sm text-on-surface-variant">Run it on your own servers with Docker, free from proprietary platforms and connected to data across your stack.</p>
+            </div>
+          </div>
+          
+          <div class="flex gap-gutter items-start p-gutter bg-surface-container rounded-lg border border-outline-variant hover:border-secondary transition-colors cursor-default">
+            <span class="material-symbols-outlined text-secondary">verified_user</span>
+            <div>
+              <h3 class="font-bold text-on-surface">Memory Safety &amp; Speed</h3>
+              <p class="text-body-sm text-on-surface-variant">Leveraging Rust&#39;s borrow checker and Polars&#39; SIMD-optimized execution for zero-copy data processing to ensure blazing performance.</p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      <div class="relative overflow-hidden rounded-xl border border-outline-variant aspect-video">
+        
+        <div class="w-full h-full bg-surface-container-low flex items-center justify-center">
+          <span class="material-symbols-outlined text-outline-variant" style="font-size: 80px;">memory</span>
+        </div>
+        
+        <div class="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
+        
+        
+        
+      </div>
+    </div>
+  </section>
+  
+
+  
+  <section class="bg-surface-container-lowest py-margin-desktop px-margin-desktop border-t border-outline-variant">
+    <div class="max-w-[1280px] mx-auto">
+      <h2 class="font-headline-lg text-headline-lg text-on-surface mb-margin-desktop text-center">Compatibility Matrix</h2>
+      <p class="text-on-surface-variant">The software is still in alpha so expect some rough edges.</p>
+      <div class="overflow-x-auto border border-outline-variant rounded-lg">
+        <table class="w-full text-left font-body-sm">
+          <thead class="bg-surface-container-highest">
+            <tr>
+              <th class="p-gutter font-label-caps text-on-surface">Feature / Protocol</th>
+              <th class="p-gutter font-label-caps text-on-surface">Support</th>
+              <th class="p-gutter font-label-caps text-on-surface">Notes</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-outline-variant">
+            
+            <tr>
+              <td class="p-gutter font-bold text-on-surface">Power BI Desktop</td>
+              <td class="p-gutter">
+                <span class="text-secondary font-bold text-[11px] uppercase tracking-wider">FULL SUPPORT</span>
+                
+              </td>
+              <td class="p-gutter text-on-surface-variant">Live Connection via XMLA endpoint.</td>
+            </tr>
+            
+            <tr>
+              <td class="p-gutter font-bold text-on-surface">Excel PivotTables</td>
+              <td class="p-gutter">
+                <span class="text-secondary-fixed-dim font-bold text-[11px] uppercase tracking-wider">PARTIAL</span>
+                
+              </td>
+              <td class="p-gutter text-on-surface-variant">Tested with Office 365.</td>
+            </tr>
+            
+            <tr>
+              <td class="p-gutter font-bold text-on-surface">Calculated Measures</td>
+              <td class="p-gutter">
+                <span class="text-secondary-fixed-dim font-bold text-[11px] uppercase tracking-wider">PARTIAL</span>
+                
+              </td>
+              <td class="p-gutter text-on-surface-variant">Support 122 of 211 functions.</td>
+            </tr>
+            
+            <tr>
+              <td class="p-gutter font-bold text-on-surface">Authentication</td>
+              <td class="p-gutter">
+                <span class="text-surface-tint font-bold text-[11px] uppercase tracking-wider">IN PROGRESS</span>
+                
+              </td>
+              <td class="p-gutter text-on-surface-variant">Targeted for v0.5.0 release.</td>
+            </tr>
+            
+            <tr>
+              <td class="p-gutter font-bold text-on-surface">KPIs</td>
+              <td class="p-gutter">
+                <span class="text-surface-tint font-bold text-[11px] uppercase tracking-wider">IN PROGRESS</span>
+                
+              </td>
+              <td class="p-gutter text-on-surface-variant">Targeted for v0.6.0 release.</td>
+            </tr>
+            
+            <tr>
+              <td class="p-gutter font-bold text-on-surface">Hierarchies</td>
+              <td class="p-gutter">
+                <span class="text-surface-tint font-bold text-[11px] uppercase tracking-wider">IN PROGRESS</span>
+                
+              </td>
+              <td class="p-gutter text-on-surface-variant">Targeted for v0.6.0 release.</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+<footer class="bg-surface-container-lowest w-full py-margin-desktop mt-auto border-t border-outline-variant">
+  <div class="grid grid-cols-2 md:grid-cols-4 px-margin-desktop max-w-[1280px] mx-auto gap-margin-desktop">
+    <div class="col-span-2 md:col-span-1">
+      <span class="font-label-caps text-label-caps text-surface-tint block mb-gutter">dax.rs</span>
+      <p class="text-body-sm text-on-surface-variant opacity-80 leading-relaxed">
+        © 2026 dax.rs contributors. Built with Rust.
+      </p>
+    </div>
+    <div>
+      <h4 class="font-label-caps text-label-caps text-on-surface mb-gutter">Community</h4>
+      <ul class="space-y-unit">
+        <li><a class="text-on-surface-variant opacity-80 hover:text-secondary hover:opacity-100 transition-all underline-offset-4 hover:underline text-body-sm" href="https://github.com/daxrs/dax-rs">GitHub</a></li>
+        
+      </ul>
+    </div>
+    <div>
+      
+      </div>
+    <div>
+      <h4 class="font-label-caps text-label-caps text-on-surface mb-gutter">Stay Updated</h4>
+      <form method="post" action="http://lm.dax.rs/subscription/form" class="flex">
+          <input type="hidden" name="nonce" />
+          <input type="hidden" name="next" value="https://www.dax.rs" />
+
+          <label for="footer-email" class="sr-only">Email address</label>
+        <input id="footer-email" class="bg-surface-container-low border border-outline-variant border-r-0 text-body-sm rounded-l px-gutter w-full focus:ring-1 focus:ring-secondary focus:border-secondary" placeholder="Email" type="email" name="email"/>
+        <button type="submit" aria-label="Subscribe to newsletter" class="bg-surface-tint text-on-primary px-gutter rounded-r hover:opacity-90 transition-all">
+          <span aria-hidden="true" class="material-symbols-outlined">send</span>
+        </button>
+      </form>
+    </div>
+  </div>
+  <div class="px-margin-desktop max-w-[1280px] mx-auto mt-margin-desktop pt-gutter border-t border-outline-variant flex justify-between items-center">
+    <p class="font-body-sm text-body-sm text-on-surface-variant opacity-60">Built with <a href="https://gohugo.io" class="hover:text-secondary transition-colors">Hugo</a>.</p>
+    <div class="flex gap-4 items-center">
+      <span class="w-3 h-3 rounded-full bg-secondary-container/20 flex items-center justify-center">
+        <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+      </span>
+      <span class="font-label-caps text-[10px] text-on-surface-variant uppercase">All Systems Nominal</span>
+    </div>
+  </div>
+</footer>
+
+
+
+<script>
+  const copyBtn = document.getElementById('copy-btn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      const cmd = document.getElementById('terminal-cmd').textContent;
+      navigator.clipboard.writeText(cmd).catch(() => {});
+      copyBtn.textContent = 'check';
+      copyBtn.classList.add('text-secondary');
+      setTimeout(() => {
+        copyBtn.textContent = 'content_copy';
+        copyBtn.classList.remove('text-secondary');
+      }, 2000);
+    });
+  }
+</script>
+
+</body>
 </html>
