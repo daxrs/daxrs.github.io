@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Documentation on dax.rs | High-Performance DAX/XMLA Server in Rust</title><link>https://www.dax.rs/docs/</link><description>Recent content in Documentation on dax.rs | High-Performance DAX/XMLA Server in Rust</description><generator>Hugo</generator><language>en-us</language><atom:link href="https://www.dax.rs/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Running</title><link>https://www.dax.rs/docs/running/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.dax.rs/docs/running/</guid><description>&lt;h2 id="run-server">Run server&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Documentation on dax.rs | High-Performance DAX/XMLA Server in Rust</title><link>https://www.dax.rs/docs/</link><description>Recent content in Documentation on dax.rs | High-Performance DAX/XMLA Server in Rust</description><generator>Hugo</generator><language>en-us</language><atom:link href="https://www.dax.rs/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Running the DAX &amp; XMLA Server</title><link>https://www.dax.rs/docs/running/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.dax.rs/docs/running/</guid><description>&lt;h2 id="run-server">Run server&lt;/h2>
 &lt;p>The server scans &lt;code>--models-root&lt;/code> for every &lt;code>*.json&lt;/code> TMSL file and loads each as a separate model. With no flags at all, it defaults to &lt;code>./demodata&lt;/code> for both models and datasets — generate the demo dataset first with &lt;code>cargo run --bin generate-demodata&lt;/code>, then:&lt;/p>
 &lt;pre tabindex="0">&lt;code>cargo run --bin dax-rs
 &lt;/code>&lt;/pre>&lt;p>Or point it at your own models directory:&lt;/p>
@@ -35,7 +35,14 @@
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">datasets&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">type&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">local&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">root&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">./data&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The XMLA endpoint URL (&lt;code>http://&amp;lt;hostname&amp;gt;:&amp;lt;port&amp;gt;/xmla&lt;/code>) and the MSOLAP connection string are derived automatically from &lt;code>hostname&lt;/code> and &lt;code>port&lt;/code>.&lt;/p></description></item><item><title>DAX functions</title><link>https://www.dax.rs/docs/dax_functions/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.dax.rs/docs/dax_functions/</guid><description>&lt;h1 id="dax-functions--implementation-status">DAX Functions — Implementation Status&lt;/h1>
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The XMLA endpoint URL (&lt;code>http://&amp;lt;hostname&amp;gt;:&amp;lt;port&amp;gt;/xmla&lt;/code>) and the MSOLAP connection string are derived automatically from &lt;code>hostname&lt;/code> and &lt;code>port&lt;/code>.&lt;/p></description></item><item><title>DAX REST API</title><link>https://www.dax.rs/docs/dax_api/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.dax.rs/docs/dax_api/</guid><description>&lt;h1 id="dax-rest-api">DAX REST API&lt;/h1>
+&lt;p>Base URL: &lt;code>http://localhost:3000&lt;/code>&lt;/p>
+&lt;p>These endpoints let you run and validate DAX queries directly over HTTP — no Power BI, Excel, or XMLA client in the loop. Point any HTTP client at your model and get results back as JSON.&lt;/p>
+&lt;hr>
+&lt;h2 id="evaluate-dax">Evaluate DAX&lt;/h2>
+&lt;pre tabindex="0">&lt;code>POST /models/{id}/dax/evaluate
+Content-Type: text/plain
+&lt;/code>&lt;/pre>&lt;p>Executes a DAX query against the model and returns the tabular result. A query may contain multiple &lt;code>EVALUATE&lt;/code> statements; each produces one result table in the response array.&lt;/p></description></item><item><title>DAX Language Function Reference</title><link>https://www.dax.rs/docs/dax_functions/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.dax.rs/docs/dax_functions/</guid><description>&lt;h1 id="dax-language-function-reference">DAX Language Function Reference&lt;/h1>
 &lt;table>
  &lt;thead>
  &lt;tr>
@@ -1297,9 +1304,10 @@
  &lt;td>&lt;/td>
  &lt;/tr>
  &lt;/tbody>
-&lt;/table></description></item><item><title>Models REST API</title><link>https://www.dax.rs/docs/models_api/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.dax.rs/docs/models_api/</guid><description>&lt;h1 id="models-rest-api">Models REST API&lt;/h1>
+&lt;/table></description></item><item><title>Model Management API</title><link>https://www.dax.rs/docs/models_api/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.dax.rs/docs/models_api/</guid><description>&lt;h1 id="model-management-api">Model Management API&lt;/h1>
 &lt;p>Base URL: &lt;code>http://localhost:3000&lt;/code>&lt;/p>
 &lt;p>All responses are JSON. Model and table IDs are their names as defined in the TMSL file, percent-encoded when used in a URL path (e.g. a model named &lt;code>Sales Model&lt;/code> becomes &lt;code>Sales%20Model&lt;/code>).&lt;/p>
+&lt;p>Looking to run DAX queries? See the &lt;a href="https://www.dax.rs/docs/dax_api/">DAX REST API&lt;/a>.&lt;/p>
 &lt;hr>
 &lt;h2 id="endpoints">Endpoints&lt;/h2>
 &lt;h3 id="list-models">List models&lt;/h3>
@@ -1315,23 +1323,7 @@
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;hr>
 &lt;h3 id="get-model">Get model&lt;/h3>
 &lt;pre tabindex="0">&lt;code>GET /models/{id}
-&lt;/code>&lt;/pre>&lt;p>Returns metadata for a single model.&lt;/p>
-&lt;p>&lt;strong>Path parameters&lt;/strong>&lt;/p>
-&lt;table>
- &lt;thead>
- &lt;tr>
- &lt;th>Parameter&lt;/th>
- &lt;th>Description&lt;/th>
- &lt;/tr>
- &lt;/thead>
- &lt;tbody>
- &lt;tr>
- &lt;td>&lt;code>id&lt;/code>&lt;/td>
- &lt;td>Model name&lt;/td>
- &lt;/tr>
- &lt;/tbody>
-&lt;/table>
-&lt;p>&lt;strong>Response &lt;code>200 OK&lt;/code>&lt;/strong>&lt;/p></description></item><item><title>TMSL Model</title><link>https://www.dax.rs/docs/tmsl/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.dax.rs/docs/tmsl/</guid><description>&lt;h1 id="tmsl-model-documentation">TMSL Model Documentation&lt;/h1>
+&lt;/code>&lt;/pre>&lt;p>Returns metadata for a single model.&lt;/p></description></item><item><title>TMSL Model</title><link>https://www.dax.rs/docs/tmsl/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://www.dax.rs/docs/tmsl/</guid><description>&lt;h1 id="tmsl-model-documentation">TMSL Model Documentation&lt;/h1>
 &lt;p>This document describes the subset of Tabular Model Scripting Language (TMSL) that
 &lt;code>dax-rs&lt;/code> can read and write. The format is a JSON file that describes tables,
 columns, measures, and relationships. It maps directly to Power BI Desktop&amp;rsquo;s
